@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.33214.272
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gun_recoil_stabilizer", "Gun_recoil_stabilizer\Gun_recoil_stabilizer.csproj", "{D80AA761-4E95-42FB-AA2F-800BD893EB61}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D80AA761-4E95-42FB-AA2F-800BD893EB61}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D80AA761-4E95-42FB-AA2F-800BD893EB61}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D80AA761-4E95-42FB-AA2F-800BD893EB61}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D80AA761-4E95-42FB-AA2F-800BD893EB61}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4CCAA4EC-F0A0-46E4-B98B-31CC37F37665}
+	EndGlobalSection
+EndGlobal
