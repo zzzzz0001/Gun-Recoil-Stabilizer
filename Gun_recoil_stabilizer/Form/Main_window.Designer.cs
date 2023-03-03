@@ -33,8 +33,8 @@ namespace Gun_recoil_stabilizer
             this.Stabilizer_type_combobox = new System.Windows.Forms.ComboBox();
             this.Stabilizer_toggle_keybinding_label = new System.Windows.Forms.Label();
             this.Stabilizer_toggle_keybinding_combobox = new System.Windows.Forms.ComboBox();
-            this.Rate_of_stabilization_label = new System.Windows.Forms.Label();
-            this.Rate_of_stabilization_numericupdown = new System.Windows.Forms.NumericUpDown();
+            this.Stabilization_rate_label = new System.Windows.Forms.Label();
+            this.Stabilization_rate_numericupdown = new System.Windows.Forms.NumericUpDown();
             this.Increase_stabilization_label = new System.Windows.Forms.Label();
             this.Increase_stabilization_combobox = new System.Windows.Forms.ComboBox();
             this.Decrease_stabilization_combobox = new System.Windows.Forms.ComboBox();
@@ -45,7 +45,8 @@ namespace Gun_recoil_stabilizer
             this.auto_off_stabilisation_label = new System.Windows.Forms.Label();
             this.data_import_spray_pattern_label = new System.Windows.Forms.Label();
             this.data_import_spray_pattern_button = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.Rate_of_stabilization_numericupdown)).BeginInit();
+            this.seconds_label1 = new System.Windows.Forms.Label();
+            ((System.ComponentModel.ISupportInitialize)(this.Stabilization_rate_numericupdown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -97,34 +98,33 @@ namespace Gun_recoil_stabilizer
             this.Stabilizer_toggle_keybinding_combobox.TabIndex = 3;
             this.Stabilizer_toggle_keybinding_combobox.Text = "choose one";
             // 
-            // Rate_of_stabilization_label
+            // Stabilization_rate_label
             // 
-            this.Rate_of_stabilization_label.AutoSize = true;
-            this.Rate_of_stabilization_label.Font = new System.Drawing.Font("Segoe UI", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.Rate_of_stabilization_label.Location = new System.Drawing.Point(32, 21);
-            this.Rate_of_stabilization_label.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.Rate_of_stabilization_label.Name = "Rate_of_stabilization_label";
-            this.Rate_of_stabilization_label.Size = new System.Drawing.Size(216, 31);
-            this.Rate_of_stabilization_label.TabIndex = 4;
-            this.Rate_of_stabilization_label.Text = "Rate of stabilization";
+            this.Stabilization_rate_label.AutoSize = true;
+            this.Stabilization_rate_label.Font = new System.Drawing.Font("Segoe UI", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.Stabilization_rate_label.Location = new System.Drawing.Point(14, 21);
+            this.Stabilization_rate_label.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.Stabilization_rate_label.Name = "Stabilization_rate_label";
+            this.Stabilization_rate_label.Size = new System.Drawing.Size(185, 31);
+            this.Stabilization_rate_label.TabIndex = 4;
+            this.Stabilization_rate_label.Text = "Stabilization rate";
             // 
-            // Rate_of_stabilization_numericupdown
+            // Stabilization_rate_numericupdown
             // 
-            this.Rate_of_stabilization_numericupdown.AutoSize = true;
-            this.Rate_of_stabilization_numericupdown.DecimalPlaces = 3;
-            this.Rate_of_stabilization_numericupdown.Font = new System.Drawing.Font("Segoe UI", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.Rate_of_stabilization_numericupdown.Increment = new decimal(new int[] {
+            this.Stabilization_rate_numericupdown.AutoSize = true;
+            this.Stabilization_rate_numericupdown.DecimalPlaces = 3;
+            this.Stabilization_rate_numericupdown.Font = new System.Drawing.Font("Segoe UI", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.Stabilization_rate_numericupdown.Increment = new decimal(new int[] {
             1,
             0,
             0,
             196608});
-            this.Rate_of_stabilization_numericupdown.Location = new System.Drawing.Point(256, 14);
-            this.Rate_of_stabilization_numericupdown.Margin = new System.Windows.Forms.Padding(4);
-            this.Rate_of_stabilization_numericupdown.Name = "Rate_of_stabilization_numericupdown";
-            this.Rate_of_stabilization_numericupdown.Size = new System.Drawing.Size(166, 38);
-            this.Rate_of_stabilization_numericupdown.TabIndex = 5;
-            this.Rate_of_stabilization_numericupdown.Tag = "Rate_of_stabilization_numericupdown_tag";
-            this.Rate_of_stabilization_numericupdown.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.Stabilization_rate_numericupdown.Location = new System.Drawing.Point(207, 14);
+            this.Stabilization_rate_numericupdown.Margin = new System.Windows.Forms.Padding(4);
+            this.Stabilization_rate_numericupdown.Name = "Stabilization_rate_numericupdown";
+            this.Stabilization_rate_numericupdown.Size = new System.Drawing.Size(130, 38);
+            this.Stabilization_rate_numericupdown.TabIndex = 5;
+            this.Stabilization_rate_numericupdown.Tag = "Stabilization_rate_numericupdown_tag";
             // 
             // Increase_stabilization_label
             // 
@@ -189,9 +189,10 @@ namespace Gun_recoil_stabilizer
             // 
             // splitContainer1.Panel2
             // 
-            this.splitContainer1.Panel2.Controls.Add(this.Rate_of_stabilization_numericupdown);
+            this.splitContainer1.Panel2.Controls.Add(this.seconds_label1);
+            this.splitContainer1.Panel2.Controls.Add(this.Stabilization_rate_numericupdown);
             this.splitContainer1.Panel2.Controls.Add(this.Decrease_stabilization_combobox);
-            this.splitContainer1.Panel2.Controls.Add(this.Rate_of_stabilization_label);
+            this.splitContainer1.Panel2.Controls.Add(this.Stabilization_rate_label);
             this.splitContainer1.Panel2.Controls.Add(this.Decrease_stabilization_label);
             this.splitContainer1.Panel2.Controls.Add(this.Increase_stabilization_label);
             this.splitContainer1.Panel2.Controls.Add(this.Increase_stabilization_combobox);
@@ -225,7 +226,7 @@ namespace Gun_recoil_stabilizer
             this.auto_off_stabilisation_numericupdown.Name = "auto_off_stabilisation_numericupdown";
             this.auto_off_stabilisation_numericupdown.Size = new System.Drawing.Size(117, 38);
             this.auto_off_stabilisation_numericupdown.TabIndex = 11;
-            this.auto_off_stabilisation_numericupdown.UpDownAlign = System.Windows.Forms.LeftRightAlignment.Left;
+            this.auto_off_stabilisation_numericupdown.Tag = "auto_off_stabilisation_numericupdown_tag";
             // 
             // auto_off_stabilisation_label
             // 
@@ -258,6 +259,17 @@ namespace Gun_recoil_stabilizer
             this.data_import_spray_pattern_button.Text = "browse";
             this.data_import_spray_pattern_button.UseVisualStyleBackColor = true;
             // 
+            // seconds_label1
+            // 
+            this.seconds_label1.AutoSize = true;
+            this.seconds_label1.Font = new System.Drawing.Font("Segoe UI", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.seconds_label1.Location = new System.Drawing.Point(356, 27);
+            this.seconds_label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.seconds_label1.Name = "seconds_label1";
+            this.seconds_label1.Size = new System.Drawing.Size(56, 17);
+            this.seconds_label1.TabIndex = 15;
+            this.seconds_label1.Text = "seconds";
+            // 
             // Main_window
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 28F);
@@ -271,7 +283,7 @@ namespace Gun_recoil_stabilizer
             this.Name = "Main_window";
             this.Text = "Recoil Stabilizer";
             this.Load += new System.EventHandler(this.Main_window_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.Rate_of_stabilization_numericupdown)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Stabilization_rate_numericupdown)).EndInit();
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel1.PerformLayout();
             this.splitContainer1.Panel2.ResumeLayout(false);
@@ -290,8 +302,8 @@ namespace Gun_recoil_stabilizer
         private System.Windows.Forms.ComboBox Stabilizer_type_combobox;
         private System.Windows.Forms.Label Stabilizer_toggle_keybinding_label;
         private System.Windows.Forms.ComboBox Stabilizer_toggle_keybinding_combobox;
-        private System.Windows.Forms.Label Rate_of_stabilization_label;
-        private System.Windows.Forms.NumericUpDown Rate_of_stabilization_numericupdown;
+        private System.Windows.Forms.Label Stabilization_rate_label;
+        private System.Windows.Forms.NumericUpDown Stabilization_rate_numericupdown;
         private System.Windows.Forms.Label Increase_stabilization_label;
         private System.Windows.Forms.ComboBox Increase_stabilization_combobox;
         private System.Windows.Forms.ComboBox Decrease_stabilization_combobox;
@@ -302,6 +314,7 @@ namespace Gun_recoil_stabilizer
         private System.Windows.Forms.Label auto_off_stabilisation_label;
         private System.Windows.Forms.Label data_import_spray_pattern_label;
         private System.Windows.Forms.Button data_import_spray_pattern_button;
+        private System.Windows.Forms.Label seconds_label1;
     }
 }
 
