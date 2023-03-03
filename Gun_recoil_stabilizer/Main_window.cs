@@ -10,12 +10,21 @@ using System.Windows.Forms;
 
 namespace Gun_recoil_stabilizer
 {
-    public partial class Form1 : Form
+    public partial class Main_window : Form
     {
-        public Form1()
+        public Main_window()
         {
             InitializeComponent();
         }
 
+        private void Increase_keybinding_label_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Main_window_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }
