@@ -11,11 +11,11 @@ namespace Gun_recoil_stabilizer.WinWrapper
 
         // GetCursorPos API import
         [DllImport("User32.Dll")]
-        private static extern int GetCursorPos(ref WinPoint pPoint);
+        private static extern int GetCursorPos(ref WinPoint pPoint);    //ref : https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getcursorpos
 
         // SetCursorPos API import
         [DllImport("User32.Dll")]
-        private static extern int SetCursorPos(int pX, int pY);
+        private static extern int SetCursorPos(int pX, int pY);     //ref : https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setcursorpos
 
         #endregion
 

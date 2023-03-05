@@ -4,6 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+//https://learn.microsoft.com/en-us/windows/win32/api/winuser/
+//https://pinvoke.net/
+
 namespace Gun_recoil_stabilizer
 {
     static class Program

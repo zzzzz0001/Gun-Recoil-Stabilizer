@@ -2,7 +2,7 @@
 
 namespace Gun_recoil_stabilizer.Utils
 {
-    class AssemblyHelper
+    class AssemblyHelper   //something fully useless to me
     {
         //
         // Members

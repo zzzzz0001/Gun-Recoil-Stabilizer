@@ -6,7 +6,9 @@ namespace Gun_recoil_stabilizer.WinHelper
     //
     // Position structure
     //
-    class CursorPosition
+
+    //they uses fucntion made in WinWrapper to make simpler functions
+    class CursorPosition         //constructor used in GetCurrentPosition() function in CursorHelper
     {
         //
         // Constants
