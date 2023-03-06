@@ -29,6 +29,7 @@ namespace Gun_recoil_stabilizer
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.Stabilizer_toggle_keybinding_label = new System.Windows.Forms.Label();
             this.Stabilizer_toggle_keybinding_combobox = new System.Windows.Forms.ComboBox();
             this.Increase_stabilization_combobox = new System.Windows.Forms.ComboBox();
@@ -46,6 +47,13 @@ namespace Gun_recoil_stabilizer
             this.auto_off_stabilisation_numericupdown = new System.Windows.Forms.NumericUpDown();
             this.seconds_label = new System.Windows.Forms.Label();
             this.Start_button = new System.Windows.Forms.Button();
+            this.Error_message = new System.Windows.Forms.Label();
+            this.Increase_clear_button = new System.Windows.Forms.Button();
+            this.Decrease_clear_button = new System.Windows.Forms.Button();
+            this.Stabilizer_toggle_clear_button = new System.Windows.Forms.Button();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.Copy_error_button = new System.Windows.Forms.Button();
+            this.imported_label = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.Stabilization_rate_numericupdown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.auto_off_stabilisation_numericupdown)).BeginInit();
             this.SuspendLayout();
@@ -172,12 +180,13 @@ namespace Gun_recoil_stabilizer
             "X",
             "Y",
             "Z"});
-            this.Stabilizer_toggle_keybinding_combobox.Location = new System.Drawing.Point(365, 204);
+            this.Stabilizer_toggle_keybinding_combobox.Location = new System.Drawing.Point(325, 202);
             this.Stabilizer_toggle_keybinding_combobox.Margin = new System.Windows.Forms.Padding(4);
             this.Stabilizer_toggle_keybinding_combobox.Name = "Stabilizer_toggle_keybinding_combobox";
             this.Stabilizer_toggle_keybinding_combobox.Size = new System.Drawing.Size(154, 36);
             this.Stabilizer_toggle_keybinding_combobox.TabIndex = 3;
-            this.Stabilizer_toggle_keybinding_combobox.Text = "choose one";
+            this.Stabilizer_toggle_keybinding_combobox.Tag = "";
+            this.Stabilizer_toggle_keybinding_combobox.Text = "F2";
             // 
             // Increase_stabilization_combobox
             // 
@@ -195,107 +204,12 @@ namespace Gun_recoil_stabilizer
             "F9",
             "F10",
             "F11",
-            "F12",
-            "PRTSC",
-            "SCRLK",
-            "PAUSE",
-            "INS",
-            "HOME",
-            "DEL",
-            "END",
-            "PGUP",
-            "PGDN",
-            "ARROW UP",
-            "ARROW LEFT",
-            "ARROW DOWN",
-            "ARROW RIGHT",
-            "NUMLK",
-            "BACKSPACE",
-            "LEFT ENTER",
-            "RIGHT ENTER",
-            "LEFT SHIFT",
-            "RIGHT SHIFT",
-            "LEFT CTRL",
-            "RIGHT CTRL",
-            "LEFT ALT",
-            "RIGHT ALT",
-            "WIN KEY",
-            "CAPSLK",
-            "TAB",
-            "`",
-            "~",
-            "!",
-            "@",
-            "#",
-            "$",
-            "%",
-            "^",
-            "&",
-            "*",
-            "(",
-            ")",
-            "-",
-            "_",
-            "=",
-            "+",
-            "\\",
-            "|",
-            "[",
-            "]",
-            "{",
-            "}",
-            ";",
-            ":",
-            "\'",
-            "\"",
-            ",",
-            ".",
-            "/",
-            "<",
-            ">",
-            "?",
-            "1",
-            "2",
-            "3",
-            "4",
-            "5",
-            "6",
-            "7",
-            "8",
-            "9",
-            "0",
-            "A",
-            "B",
-            "C",
-            "D",
-            "E",
-            "F",
-            "G",
-            "H",
-            "I",
-            "J",
-            "K",
-            "L",
-            "M",
-            "N",
-            "O",
-            "P",
-            "Q",
-            "R",
-            "S",
-            "T",
-            "U",
-            "V",
-            "W",
-            "X",
-            "Y",
-            "Z"});
+            "F12"});
             this.Increase_stabilization_combobox.Location = new System.Drawing.Point(599, 77);
             this.Increase_stabilization_combobox.Margin = new System.Windows.Forms.Padding(4);
             this.Increase_stabilization_combobox.Name = "Increase_stabilization_combobox";
             this.Increase_stabilization_combobox.Size = new System.Drawing.Size(177, 36);
             this.Increase_stabilization_combobox.TabIndex = 7;
-            this.Increase_stabilization_combobox.Text = "choose one";
             // 
             // Increase_stabilization_label
             // 
@@ -446,7 +360,6 @@ namespace Gun_recoil_stabilizer
             this.Decrease_stabilization_combobox.Name = "Decrease_stabilization_combobox";
             this.Decrease_stabilization_combobox.Size = new System.Drawing.Size(177, 36);
             this.Decrease_stabilization_combobox.TabIndex = 10;
-            this.Decrease_stabilization_combobox.Text = "choose one";
             // 
             // Stabilization_rate_numericupdown
             // 
@@ -493,13 +406,13 @@ namespace Gun_recoil_stabilizer
             this.Stabilizer_type_combobox.FormattingEnabled = true;
             this.Stabilizer_type_combobox.Items.AddRange(new object[] {
             "Vertical",
-            "Pattern"});
+            "Spray Pattern"});
             this.Stabilizer_type_combobox.Location = new System.Drawing.Point(220, 18);
             this.Stabilizer_type_combobox.Margin = new System.Windows.Forms.Padding(4);
             this.Stabilizer_type_combobox.Name = "Stabilizer_type_combobox";
             this.Stabilizer_type_combobox.Size = new System.Drawing.Size(184, 36);
             this.Stabilizer_type_combobox.TabIndex = 1;
-            this.Stabilizer_type_combobox.Text = "choose one";
+            this.Stabilizer_type_combobox.Text = "CHOOSE";
             // 
             // data_import_spray_pattern_button
             // 
@@ -509,6 +422,7 @@ namespace Gun_recoil_stabilizer
             this.data_import_spray_pattern_button.TabIndex = 11;
             this.data_import_spray_pattern_button.Text = "browse";
             this.data_import_spray_pattern_button.UseVisualStyleBackColor = true;
+            this.data_import_spray_pattern_button.Click += new System.EventHandler(this.data_import_spray_pattern_button_Click);
             // 
             // data_import_spray_pattern_label
             // 
@@ -565,19 +479,98 @@ namespace Gun_recoil_stabilizer
             this.Start_button.BackColor = System.Drawing.Color.Red;
             this.Start_button.Font = new System.Drawing.Font("Segoe UI", 28.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.Start_button.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.Start_button.Location = new System.Drawing.Point(599, 185);
+            this.Start_button.Location = new System.Drawing.Point(599, 175);
             this.Start_button.Name = "Start_button";
             this.Start_button.Size = new System.Drawing.Size(183, 73);
             this.Start_button.TabIndex = 16;
             this.Start_button.Text = "Start";
             this.Start_button.UseVisualStyleBackColor = false;
+            this.Start_button.Click += new System.EventHandler(this.Start_button_Click);
+            // 
+            // Error_message
+            // 
+            this.Error_message.AutoSize = true;
+            this.Error_message.Font = new System.Drawing.Font("Segoe UI", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.Error_message.ForeColor = System.Drawing.Color.Crimson;
+            this.Error_message.Location = new System.Drawing.Point(36, 269);
+            this.Error_message.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.Error_message.Name = "Error_message";
+            this.Error_message.Size = new System.Drawing.Size(0, 25);
+            this.Error_message.TabIndex = 17;
+            this.Error_message.Visible = false;
+            // 
+            // Increase_clear_button
+            // 
+            this.Increase_clear_button.Font = new System.Drawing.Font("Segoe UI", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.Increase_clear_button.Location = new System.Drawing.Point(795, 82);
+            this.Increase_clear_button.Name = "Increase_clear_button";
+            this.Increase_clear_button.Size = new System.Drawing.Size(48, 27);
+            this.Increase_clear_button.TabIndex = 18;
+            this.Increase_clear_button.Text = "clear";
+            this.Increase_clear_button.UseVisualStyleBackColor = true;
+            // 
+            // Decrease_clear_button
+            // 
+            this.Decrease_clear_button.Font = new System.Drawing.Font("Segoe UI", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.Decrease_clear_button.Location = new System.Drawing.Point(795, 133);
+            this.Decrease_clear_button.Name = "Decrease_clear_button";
+            this.Decrease_clear_button.Size = new System.Drawing.Size(48, 27);
+            this.Decrease_clear_button.TabIndex = 19;
+            this.Decrease_clear_button.Text = "clear";
+            this.Decrease_clear_button.UseVisualStyleBackColor = true;
+            // 
+            // Stabilizer_toggle_clear_button
+            // 
+            this.Stabilizer_toggle_clear_button.Font = new System.Drawing.Font("Segoe UI", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.Stabilizer_toggle_clear_button.Location = new System.Drawing.Point(486, 205);
+            this.Stabilizer_toggle_clear_button.Name = "Stabilizer_toggle_clear_button";
+            this.Stabilizer_toggle_clear_button.Size = new System.Drawing.Size(48, 27);
+            this.Stabilizer_toggle_clear_button.TabIndex = 20;
+            this.Stabilizer_toggle_clear_button.Text = "clear";
+            this.Stabilizer_toggle_clear_button.UseVisualStyleBackColor = true;
+            // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
+            // 
+            // Copy_error_button
+            // 
+            this.Copy_error_button.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.Copy_error_button.Location = new System.Drawing.Point(36, 297);
+            this.Copy_error_button.Name = "Copy_error_button";
+            this.Copy_error_button.Size = new System.Drawing.Size(94, 29);
+            this.Copy_error_button.TabIndex = 21;
+            this.Copy_error_button.Text = "copy error";
+            this.Copy_error_button.UseVisualStyleBackColor = true;
+            this.Copy_error_button.Visible = false;
+            // 
+            // imported_label
+            // 
+            this.imported_label.AutoSize = true;
+            this.imported_label.BackColor = System.Drawing.Color.White;
+            this.imported_label.Font = new System.Drawing.Font("Segoe UI", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.imported_label.ForeColor = System.Drawing.Color.ForestGreen;
+            this.imported_label.Location = new System.Drawing.Point(307, 118);
+            this.imported_label.Name = "imported_label";
+            this.imported_label.Size = new System.Drawing.Size(133, 17);
+            this.imported_label.TabIndex = 22;
+            this.imported_label.Text = "successfully imported";
+            this.imported_label.Visible = false;
             // 
             // Main_window
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 28F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(861, 289);
+            this.ClientSize = new System.Drawing.Size(874, 338);
+            this.Controls.Add(this.imported_label);
+            this.Controls.Add(this.Copy_error_button);
+            this.Controls.Add(this.Stabilizer_toggle_clear_button);
+            this.Controls.Add(this.Decrease_clear_button);
+            this.Controls.Add(this.Increase_clear_button);
+            this.Controls.Add(this.Error_message);
             this.Controls.Add(this.Start_button);
             this.Controls.Add(this.seconds_label1);
             this.Controls.Add(this.seconds_label);
@@ -625,6 +618,13 @@ namespace Gun_recoil_stabilizer
         private System.Windows.Forms.NumericUpDown auto_off_stabilisation_numericupdown;
         private System.Windows.Forms.Label seconds_label;
         private System.Windows.Forms.Button Start_button;
+        private System.Windows.Forms.Label Error_message;
+        private System.Windows.Forms.Button Increase_clear_button;
+        private System.Windows.Forms.Button Decrease_clear_button;
+        private System.Windows.Forms.Button Stabilizer_toggle_clear_button;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.Button Copy_error_button;
+        private System.Windows.Forms.Label imported_label;
     }
 }
 
