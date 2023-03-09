@@ -21,6 +21,9 @@ namespace Gun_recoil_stabilizer
         [return: MarshalAs(UnmanagedType.Bool)]
         static extern bool AllocConsole();
 
+        public bool Check_Stabilization_rate_Continous_run { get; set; }
+        public bool Toggle_Stop_Continous_run { get; set; }
+
         public Main_window()
         {
             InitializeComponent();
@@ -109,6 +112,12 @@ namespace Gun_recoil_stabilizer
 
         private bool validation()  //created by me
         {
+            if (Stabilizer_toggle_keybinding_combobox.AccessibilityObject.Value == null)  //this means that nothing is being selected in Stabilizer toggle keybiding type which is a necessary thing
+            {
+                error("Stabilizer togggle Keymap is not selected (recommended key -> F2)");
+                return false;
+            }
+
             //CHECK IF ALL 3 DROP DOWNS VALUES ARE DIFFERENT
 
             if ((Increase_stabilization_combobox.AccessibilityObject.Value == Decrease_stabilization_combobox.AccessibilityObject.Value) && Increase_stabilization_combobox.AccessibilityObject.Value != null)
@@ -214,9 +223,23 @@ namespace Gun_recoil_stabilizer
                 var t2 = Decrease_stabilization_combobox.Text;
                 var t3 = Stabilizer_toggle_keybinding_combobox.Text;
 
-                Task.Run(() => Keyboard_and_Mouse.START(auto_off_stabilisation_numericupdown.Value, Stabilization_rate_numericupdown.Value, Stabilization_rate_numericupdown.DecimalPlaces, t1, t2, t3)); //, Increase_stabilization_combobox.Text, Decrease_stabilization_combobox.Text, Stabilizer_toggle_keybinding_combobox.Text
+                //this is going to run a fucntion that starts a function which captures keys pressed of keybaord and mouse constantly and then we can do further function there
+                Task.Run(() => Keyboard_and_Mouse.START(auto_off_stabilisation_numericupdown.Value, Stabilization_rate_numericupdown.Value, Stabilization_rate_numericupdown.DecimalPlaces, t1, t2, t3));  //direcly sending the values of t1 t2 t3 causes the function not to run
 
-                //PUT ALL THE MAIN STUFF HERE
+                //but somehow the below code which is in synchronous run perfectly fine without t1, t2, t3
+                //Keyboard_and_Mouse.START(auto_off_stabilisation_numericupdown.Value, Stabilization_rate_numericupdown.Value, Stabilization_rate_numericupdown.DecimalPlaces, Increase_stabilization_combobox.Text, Decrease_stabilization_combobox.Text, Stabilizer_toggle_keybinding_combobox.Text);
+
+
+                //another thread to check if any changes occured to stabilization_rate
+                Check_Stabilization_rate_Continous_run = true;
+                Task.Run(() => Check_Stabilization_rate());   //sending the instance as this is used to edit the value of form
+
+                
+                Keyboard_and_Mouse.Toggle_stop = false;  //this initialises the value
+                Toggle_Stop_Continous_run = true;
+                //a thread to see if toggle_stop was true, if it is, then we can change the button property of Start back to Red
+                Task.Run(() => Toggle_Stop());
+
             }
         }
 
@@ -225,6 +248,48 @@ namespace Gun_recoil_stabilizer
             Start_button.Text = "Start";
             Start_button.BackColor = Color.Red;
             Keyboard_and_Mouse.STOP();
+            Check_Stabilization_rate_Continous_run = false;
+            Toggle_Stop_Continous_run = false;
+        }
+
+        public Task Check_Stabilization_rate()
+        {
+            while (Check_Stabilization_rate_Continous_run)
+            {
+                var power = Math.Pow(10, Stabilization_rate_numericupdown.DecimalPlaces);
+                int form_rate = (int)( Stabilization_rate_numericupdown.Value * (decimal)power );
+                int stablization_rate = Data_of_form.Stabilization_rate;
+                if (stablization_rate != form_rate)
+                {
+                    try
+                    {
+                        Stabilization_rate_numericupdown.Value = (decimal)stablization_rate / (decimal)power;
+                    }
+                    catch (Exception e)
+                    {
+
+                    }
+                    Stabilization_rate_numericupdown.Refresh();
+
+                }
+            }
+            return Task.CompletedTask;
+        }
+
+        public Task Toggle_Stop()
+        {
+            while (Toggle_Stop_Continous_run)
+            {
+                if (Keyboard_and_Mouse.Toggle_stop == true)
+                {
+                    Toggle_Stop_Continous_run = false;
+                    Check_Stabilization_rate_Continous_run = false;
+                    Start_button.Text = "Start";
+                    Start_button.BackColor = Color.Red;
+                }
+            }
+
+            return Task.CompletedTask;
         }
         #endregion
     }
