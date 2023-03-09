@@ -186,6 +186,7 @@ namespace Gun_recoil_stabilizer
             this.Stabilizer_toggle_keybinding_combobox.Size = new System.Drawing.Size(154, 36);
             this.Stabilizer_toggle_keybinding_combobox.TabIndex = 3;
             this.Stabilizer_toggle_keybinding_combobox.Tag = "";
+            this.Stabilizer_toggle_keybinding_combobox.SelectedIndexChanged += new System.EventHandler(this.Stabilizer_toggle_keybinding_combobox_SelectedIndexChanged);
             // 
             // Increase_stabilization_combobox
             // 
@@ -303,6 +304,7 @@ namespace Gun_recoil_stabilizer
             this.Increase_stabilization_combobox.Name = "Increase_stabilization_combobox";
             this.Increase_stabilization_combobox.Size = new System.Drawing.Size(177, 36);
             this.Increase_stabilization_combobox.TabIndex = 7;
+            this.Increase_stabilization_combobox.SelectedIndexChanged += new System.EventHandler(this.Increase_stabilization_combobox_SelectedIndexChanged);
             // 
             // Increase_stabilization_label
             // 
@@ -453,6 +455,7 @@ namespace Gun_recoil_stabilizer
             this.Decrease_stabilization_combobox.Name = "Decrease_stabilization_combobox";
             this.Decrease_stabilization_combobox.Size = new System.Drawing.Size(177, 36);
             this.Decrease_stabilization_combobox.TabIndex = 10;
+            this.Decrease_stabilization_combobox.SelectedIndexChanged += new System.EventHandler(this.Decrease_stabilization_combobox_SelectedIndexChanged);
             // 
             // Stabilization_rate_numericupdown
             // 
@@ -466,6 +469,11 @@ namespace Gun_recoil_stabilizer
             196608});
             this.Stabilization_rate_numericupdown.Location = new System.Drawing.Point(646, 12);
             this.Stabilization_rate_numericupdown.Margin = new System.Windows.Forms.Padding(4);
+            this.Stabilization_rate_numericupdown.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
             this.Stabilization_rate_numericupdown.Name = "Stabilization_rate_numericupdown";
             this.Stabilization_rate_numericupdown.Size = new System.Drawing.Size(130, 38);
             this.Stabilization_rate_numericupdown.TabIndex = 5;
@@ -555,6 +563,7 @@ namespace Gun_recoil_stabilizer
             this.auto_off_stabilisation_numericupdown.Size = new System.Drawing.Size(117, 38);
             this.auto_off_stabilisation_numericupdown.TabIndex = 11;
             this.auto_off_stabilisation_numericupdown.Tag = "auto_off_stabilisation_numericupdown_tag";
+            this.auto_off_stabilisation_numericupdown.ValueChanged += new System.EventHandler(this.auto_off_stabilisation_numericupdown_ValueChanged);
             // 
             // seconds_label
             // 

@@ -18,17 +18,20 @@ namespace Gun_recoil_stabilizer.Speific_Data_Storage
 
         public static int Stabilization_rate { get; set; } = 0;
 
-        public static Keys Increase_stabilization_rate_key { get; set; }
+        //public static Keys Increase_stabilization_rate_key { get; set; }
         public static int Increase_stabilization_rate_key_int { get; set; }
 
-        public static Keys Decrease_stabililization_rate_key { get; set; }
+        //public static Keys Decrease_stabililization_rate_key { get; set; }
         public static int Decrease_stabililization_rate_key_int { get; set; }
 
-        public static Keys Stabilizer_toggle_key { get; set; }
+        //public static Keys Stabilizer_toggle_key { get; set; }
         public static int Stabilizer_toggle_key_int { get; set; }
         
-        public static List<Keys> Keys_inc_dec_tog_leftclick { get; set; } = new List<Keys>();
-        public static List<int> Keys_inc_dec_tog_leftclick_int { get; set; } = new List<int>();
+        //public static List<Keys> Keys_inc_dec_tog_leftclick { get; set; } = new List<Keys>();
+        public static List<int> Keys_inc_dec_tog_leftclick_int { get; set; } = new List<int>()
+        {
+            -1, -1, -1, 1   //negative 1 shows that its not sent
+        };
 
         public static void ADD(Tuple<int, int> input)
         {
@@ -38,7 +41,7 @@ namespace Gun_recoil_stabilizer.Speific_Data_Storage
 
         public static string ADD(List<string> input)
         {
-            Clear();
+            Clear_uploaded_docs();
 
             foreach (var piece in input)
             {
@@ -69,7 +72,7 @@ namespace Gun_recoil_stabilizer.Speific_Data_Storage
             return null;
         }
 
-        public static void Clear()
+        public static void Clear_uploaded_docs()
         {
             CSV_STORAGE = new List<Tuple<int, int>>();
             Dataset_chosen = false;
@@ -81,36 +84,40 @@ namespace Gun_recoil_stabilizer.Speific_Data_Storage
 
             //finding the byte value of it
 
-            if (Increase_stabilization_rate_key_ != "")
+            if (Increase_stabilization_rate_key_ != "" && Increase_stabilization_rate_key_ != null)
             {
                 Increase_stabilization_rate_key_int = Mapping_from_myname_to_key_valuye[Increase_stabilization_rate_key_];
-                Increase_stabilization_rate_key = (Keys)Increase_stabilization_rate_key_int;
+
+
+                Keys_inc_dec_tog_leftclick_int[0] = Increase_stabilization_rate_key_int;
+                //Increase_stabilization_rate_key = (Keys)Increase_stabilization_rate_key_int;
             }
             
 
-            if (Decrease_stablilization_rate_key_ != "")
+            if (Decrease_stablilization_rate_key_ != "" && Decrease_stablilization_rate_key_ != null)
             {
                 Decrease_stabililization_rate_key_int = Mapping_from_myname_to_key_valuye[Decrease_stablilization_rate_key_];
-                Decrease_stabililization_rate_key = (Keys)Decrease_stabililization_rate_key_int;
+               
+                Keys_inc_dec_tog_leftclick_int[1] = Decrease_stabililization_rate_key_int;
+                //Decrease_stabililization_rate_key = (Keys)Decrease_stabililization_rate_key_int;
             }
             
 
-            if (Stabilizer_toggle_key_ != "")
+            if (Stabilizer_toggle_key_ != "" && Stabilizer_toggle_key_ != null)
             {
                 Stabilizer_toggle_key_int = Mapping_from_myname_to_key_valuye[Stabilizer_toggle_key_];
-                Stabilizer_toggle_key = (Keys)Stabilizer_toggle_key_int;
+
+                Keys_inc_dec_tog_leftclick_int[2] = Stabilizer_toggle_key_int;
+                //Stabilizer_toggle_key = (Keys)Stabilizer_toggle_key_int;
             }
             
 
-            Keys_inc_dec_tog_leftclick.Add(Increase_stabilization_rate_key);
-            Keys_inc_dec_tog_leftclick.Add(Decrease_stabililization_rate_key);
-            Keys_inc_dec_tog_leftclick.Add(Stabilizer_toggle_key);
-            Keys_inc_dec_tog_leftclick.Add(Keys.LButton);
+            //Keys_inc_dec_tog_leftclick.Add(Increase_stabilization_rate_key);
+            //Keys_inc_dec_tog_leftclick.Add(Decrease_stabililization_rate_key);
+            //Keys_inc_dec_tog_leftclick.Add(Stabilizer_toggle_key);
+            //Keys_inc_dec_tog_leftclick.Add(Keys.LButton);
 
-            Keys_inc_dec_tog_leftclick_int.Add(Increase_stabilization_rate_key_int);
-            Keys_inc_dec_tog_leftclick_int.Add(Decrease_stabililization_rate_key_int);
-            Keys_inc_dec_tog_leftclick_int.Add(Stabilizer_toggle_key_int);
-            Keys_inc_dec_tog_leftclick_int.Add(1);
+            
         }
 
         public static Dictionary<string, int> Mapping_from_myname_to_key_valuye { get; private set; } = new Dictionary<string, int>()

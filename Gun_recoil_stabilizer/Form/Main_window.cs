@@ -24,10 +24,21 @@ namespace Gun_recoil_stabilizer
         public bool Check_Stabilization_rate_Continous_run { get; set; }
         public bool Toggle_Stop_Continous_run { get; set; }
 
+        public delegate void Stop_delegate_function();
+        public Stop_delegate_function Stop_delegate;
+
+        public delegate void Refresh_stabilization_numericupdown();
+        public Refresh_stabilization_numericupdown Refresh_delegate;
+
         public Main_window()
         {
             InitializeComponent();
             AllocConsole();
+
+            Stop_delegate = new Stop_delegate_function(Stop_function);
+            Refresh_delegate = new Refresh_stabilization_numericupdown(REFRESH_STABILIZATION_NUMERICUPDOWN_function);
+
+
         }
 
         private async void Start_button_Click(object sender, EventArgs e)
@@ -58,7 +69,7 @@ namespace Gun_recoil_stabilizer
                 error(fullreset: true);  //which basically measn that 
 
                 imported_label.Visible = false;
-                Data_of_form.Clear();
+                Data_of_form.Clear_uploaded_docs();
 
                 string file = openFileDialog.FileName;   //variable file will be containing the fully defined path of the csv file
                 string state = null;
@@ -67,7 +78,7 @@ namespace Gun_recoil_stabilizer
                     var temp = File.ReadLines(file).ToList();
 
                     imported_label.Visible = false;
-                    Data_of_form.Clear();
+                    Data_of_form.Clear_uploaded_docs();
 
                     if (temp[0] != "")   //provided soemthing in the csv file
                         state = Data_of_form.ADD(temp);  //adding it to ram directly
@@ -107,6 +118,26 @@ namespace Gun_recoil_stabilizer
                     error(visible: true);
             }
         }
+
+        #region combobox_select_auto_trigger
+        private void Stabilizer_toggle_keybinding_combobox_SelectedIndexChanged(object sender, EventArgs e)  //fires when i select anything
+        {
+            Data_of_form.String_to_Keys_and_store(Stabilizer_toggle_key_: Stabilizer_toggle_keybinding_combobox.Text);
+        }
+
+        private void Increase_stabilization_combobox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Data_of_form.String_to_Keys_and_store(Increase_stabilization_rate_key_: Increase_stabilization_combobox.Text);
+        }
+
+        private void Decrease_stabilization_combobox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var t2 = Decrease_stabilization_combobox.Text;
+
+            Data_of_form.String_to_Keys_and_store(Decrease_stablilization_rate_key_: Decrease_stabilization_combobox.Text);
+        }
+
+        #endregion
 
         #region my_functions
 
@@ -214,17 +245,8 @@ namespace Gun_recoil_stabilizer
                 Start_button.Text = "Started";
                 Start_button.BackColor = Color.Green;
 
-
-                //now keep on tracking on mouse left click to trigger the Recoil Stabilizer
-
-                Console.WriteLine(Increase_stabilization_combobox.Text);
-
-                var t1 = Increase_stabilization_combobox.Text;
-                var t2 = Decrease_stabilization_combobox.Text;
-                var t3 = Stabilizer_toggle_keybinding_combobox.Text;
-
                 //this is going to run a fucntion that starts a function which captures keys pressed of keybaord and mouse constantly and then we can do further function there
-                Task.Run(() => Keyboard_and_Mouse.START(auto_off_stabilisation_numericupdown.Value, Stabilization_rate_numericupdown.Value, Stabilization_rate_numericupdown.DecimalPlaces, t1, t2, t3));  //direcly sending the values of t1 t2 t3 causes the function not to run
+                Task.Run(() => Keyboard_and_Mouse.START(auto_off_stabilisation_numericupdown.Value, Stabilization_rate_numericupdown.Value, Stabilization_rate_numericupdown.DecimalPlaces, this));  //direcly sending the values of t1 t2 t3 causes the function not to run
 
                 //but somehow the below code which is in synchronous run perfectly fine without t1, t2, t3
                 //Keyboard_and_Mouse.START(auto_off_stabilisation_numericupdown.Value, Stabilization_rate_numericupdown.Value, Stabilization_rate_numericupdown.DecimalPlaces, Increase_stabilization_combobox.Text, Decrease_stabilization_combobox.Text, Stabilizer_toggle_keybinding_combobox.Text);
@@ -232,13 +254,8 @@ namespace Gun_recoil_stabilizer
 
                 //another thread to check if any changes occured to stabilization_rate
                 Check_Stabilization_rate_Continous_run = true;
-                Task.Run(() => Check_Stabilization_rate());   //sending the instance as this is used to edit the value of form
+                //Task.Run(() => Check_Stabilization_rate());   //sending the instance as this is used to edit the value of form
 
-                
-                Keyboard_and_Mouse.Toggle_stop = false;  //this initialises the value
-                Toggle_Stop_Continous_run = true;
-                //a thread to see if toggle_stop was true, if it is, then we can change the button property of Start back to Red
-                Task.Run(() => Toggle_Stop());
 
             }
         }
@@ -247,9 +264,10 @@ namespace Gun_recoil_stabilizer
         {
             Start_button.Text = "Start";
             Start_button.BackColor = Color.Red;
-            Keyboard_and_Mouse.STOP();
             Check_Stabilization_rate_Continous_run = false;
             Toggle_Stop_Continous_run = false;
+            Keyboard_and_Mouse.Keyboard_Mouse_Key_Extractor_Continous_Run = false;
+            Keyboard_and_Mouse.Mouse_click_Continous_Run = false;
         }
 
         public Task Check_Stabilization_rate()
@@ -276,21 +294,28 @@ namespace Gun_recoil_stabilizer
             return Task.CompletedTask;
         }
 
-        public Task Toggle_Stop()
+        public void REFRESH_STABILIZATION_NUMERICUPDOWN_function()
         {
-            while (Toggle_Stop_Continous_run)
-            {
-                if (Keyboard_and_Mouse.Toggle_stop == true)
-                {
-                    Toggle_Stop_Continous_run = false;
-                    Check_Stabilization_rate_Continous_run = false;
-                    Start_button.Text = "Start";
-                    Start_button.BackColor = Color.Red;
-                }
-            }
+            Stabilization_rate_numericupdown.Value = (decimal)(Data_of_form.Stabilization_rate/Math.Pow(10, Stabilization_rate_numericupdown.DecimalPlaces));
 
-            return Task.CompletedTask;
+            Stabilization_rate_numericupdown.Update();
+
+
         }
+
+
         #endregion
+
+        
+        
+        
+        
+        private void auto_off_stabilisation_numericupdown_ValueChanged(object sender, EventArgs e)
+        {
+            //this only works when the increase or decrease button is being pressed which is inbuilt on numbericupdown
+            //this will not get trigger if you type it directly
+
+
+        }
     }
 }

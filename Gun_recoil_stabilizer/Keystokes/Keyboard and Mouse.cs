@@ -18,11 +18,11 @@ namespace Gun_recoil_stabilizer.Keystokes
 {
     public class Keyboard_and_Mouse
     {
-        public static bool Keyboard_Mouse_Key_Extractor_Continous_Run { get; private set; }
+        public static bool Keyboard_Mouse_Key_Extractor_Continous_Run { get; set; }
 
-        public static bool Mouse_click_Continous_Run { get; private set; }
+        public static bool Mouse_click_Continous_Run { get; set; }
 
-        public static bool Toggle_stop { get; set; }
+        public static Main_window formcontrol { get; set; }
 
         [DllImport("user32.dll")]
         private static extern int GetAsyncKeyState(Int32 i);  //ref : https://hackmag.com/coding/diy-keylogger/
@@ -36,6 +36,8 @@ namespace Gun_recoil_stabilizer.Keystokes
             {
                 foreach (var i in Data_of_form.Keys_inc_dec_tog_leftclick_int)  //no need to run through everything
                 {
+                    if (i == -1)
+                        continue;
                     int state = GetAsyncKeyState(i);
                     if (state != 0)
                     {
@@ -46,22 +48,26 @@ namespace Gun_recoil_stabilizer.Keystokes
 
                             if (i == 1)
                             {
+                                Console.WriteLine((Keys)1 + " pressed");
                                 Mouse_click_Continous_Run = true;
                                 Task.Run(() => Mouse_click());
                             }
                             else if (i == Data_of_form.Stabilizer_toggle_key_int)
                             {
-                                Toggle_stop = true;
-                                STOP();   //it should stop working
+                                STOP();
                             }
                             else if (i == Data_of_form.Increase_stabilization_rate_key_int)
                             {
                                 Data_of_form.Stabilization_rate += 1; //this can change the data in Date_of_form and a thread would be running in Main_window.cs file which can check and change it in the form
+                                REFRESH_STABILIZATION_NUMERICUPDOWN();
                             }
                             else //the last one can only be decrease stabilisation
                             {
                                 if (Data_of_form.Stabilization_rate > 0)
+                                {
                                     Data_of_form.Stabilization_rate -= 1;  //this can change the data in Date_of_form and a thread would be running in Main_window.cs file which can check and change it in the form
+                                    REFRESH_STABILIZATION_NUMERICUPDOWN();
+                                }
                             }
                         }
 
@@ -74,6 +80,11 @@ namespace Gun_recoil_stabilizer.Keystokes
                     {
                         if (pressed_set.Contains((Keys)i) == true)
                         {
+                            if (i == 1)
+                            {
+                                Mouse_click_Continous_Run = false;
+                            }
+
                             Console.WriteLine(((Keys)i).ToString() + " released. Key value = " + i);
                             pressed_set.Remove((Keys)i);
                         }
@@ -129,16 +140,15 @@ namespace Gun_recoil_stabilizer.Keystokes
             return Task.CompletedTask;
         }
 
-        #region 4_main_methods
-
         public static Task Mouse_click()
         {
             while (Mouse_click_Continous_Run)
             {
+                Console.WriteLine("hehe" + Data_of_form.Stabilization_rate);
+
+
+
                 Thread.Sleep(Data_of_form.Stabilization_rate);
-
-                Console.WriteLine("hehe");
-
             }
 
 
@@ -146,7 +156,6 @@ namespace Gun_recoil_stabilizer.Keystokes
         }
 
 
-        #endregion
 
         /// <summary>
         /// (Run by Start_function() defined in Main_window.cs (form code)
@@ -158,15 +167,15 @@ namespace Gun_recoil_stabilizer.Keystokes
         /// <param name="Decrease_stablilization_rate_key"></param>
         /// <param name="Stabilizer_toggle_key"></param>
         /// <returns></returns>
-        public static Task START(decimal Auto_off_stabilization, decimal Stabilization_rate, int precision_for_stabilization_time, string Increase_stabilization_rate_key, string Decrease_stablilization_rate_key, string Stabilizer_toggle_key) //, string Increase_stabilization_rate_key, string Decrease_stablilization_rate_key, string Stabilizer_toggle_key
+        public static Task START(decimal Auto_off_stabilization, decimal Stabilization_rate, int precision_for_stabilization_time, Main_window form) //, string Increase_stabilization_rate_key, string Decrease_stablilization_rate_key, string Stabilizer_toggle_key
         {
             Keyboard_Mouse_Key_Extractor_Continous_Run = true;
+
+            formcontrol = form;
 
             Data_of_form.Auto_off_stabilization = (int)(Auto_off_stabilization * (decimal)Math.Pow(10, precision_for_stabilization_time));
 
             Data_of_form.Stabilization_rate = (int)(Stabilization_rate * (decimal)Math.Pow(10, precision_for_stabilization_time));
-
-            Data_of_form.String_to_Keys_and_store(Increase_stabilization_rate_key, Decrease_stablilization_rate_key, Stabilizer_toggle_key);
 
 
             Keyboard_Mouse_Key_Extractor();
@@ -179,9 +188,15 @@ namespace Gun_recoil_stabilizer.Keystokes
             Keyboard_Mouse_Key_Extractor_Continous_Run = false;
             Mouse_click_Continous_Run = false;
 
+            formcontrol.Invoke(formcontrol.Stop_delegate);
+
             //also make sure the colour and text changes back as it could be triggered from the toggle key
         }
 
+        public static void REFRESH_STABILIZATION_NUMERICUPDOWN()
+        {
+            formcontrol.Invoke(formcontrol.Refresh_delegate);
+        }
     }
 
 }
