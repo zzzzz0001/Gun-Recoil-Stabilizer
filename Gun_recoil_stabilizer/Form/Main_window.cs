@@ -124,18 +124,19 @@ namespace Gun_recoil_stabilizer
         private void Stabilizer_toggle_keybinding_combobox_SelectedIndexChanged(object sender, EventArgs e)  //fires when i select anything
         {
             Data_of_form.String_to_Keys_and_store(Stabilizer_toggle_key_: Stabilizer_toggle_keybinding_combobox.Text);
+            Stabilizer_toggle_clear_button.Enabled = true;
         }
 
         private void Increase_stabilization_combobox_SelectedIndexChanged(object sender, EventArgs e)
         {
             Data_of_form.String_to_Keys_and_store(Increase_stabilization_rate_key_: Increase_stabilization_combobox.Text);
+            Increase_clear_button.Enabled = true;
         }
 
         private void Decrease_stabilization_combobox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            var t2 = Decrease_stabilization_combobox.Text;
-
             Data_of_form.String_to_Keys_and_store(Decrease_stablilization_rate_key_: Decrease_stabilization_combobox.Text);
+            Decrease_clear_button.Enabled = true;
         }
 
         #endregion
@@ -158,18 +159,21 @@ namespace Gun_recoil_stabilizer
         {
             Stabilizer_toggle_keybinding_combobox.SelectedIndex = -1;
             Stabilizer_toggle_keybinding_combobox.Refresh();
+            Stabilizer_toggle_clear_button.Enabled= false;
         }
 
         private void Increase_clear_button_Click(object sender, EventArgs e)
         {
             Increase_stabilization_combobox.SelectedIndex = -1;
             Increase_stabilization_combobox.Refresh();
+            Increase_clear_button.Enabled = false;
         }
 
         private void Decrease_clear_button_Click(object sender, EventArgs e)
         {
             Decrease_stabilization_combobox.SelectedIndex = -1;
             Decrease_stabilization_combobox.Refresh();
+            Decrease_clear_button.Enabled = false;
         }
 
         private void Copy_error_button_Click(object sender, EventArgs e)

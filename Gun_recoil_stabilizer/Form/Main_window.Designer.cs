@@ -606,6 +606,7 @@ namespace Gun_recoil_stabilizer
             // 
             // Increase_clear_button
             // 
+            this.Increase_clear_button.Enabled = false;
             this.Increase_clear_button.Font = new System.Drawing.Font("Segoe UI", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.Increase_clear_button.Location = new System.Drawing.Point(795, 82);
             this.Increase_clear_button.Name = "Increase_clear_button";
@@ -617,6 +618,7 @@ namespace Gun_recoil_stabilizer
             // 
             // Decrease_clear_button
             // 
+            this.Decrease_clear_button.Enabled = false;
             this.Decrease_clear_button.Font = new System.Drawing.Font("Segoe UI", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.Decrease_clear_button.Location = new System.Drawing.Point(795, 133);
             this.Decrease_clear_button.Name = "Decrease_clear_button";
@@ -628,6 +630,7 @@ namespace Gun_recoil_stabilizer
             // 
             // Stabilizer_toggle_clear_button
             // 
+            this.Stabilizer_toggle_clear_button.Enabled = false;
             this.Stabilizer_toggle_clear_button.Font = new System.Drawing.Font("Segoe UI", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.Stabilizer_toggle_clear_button.Location = new System.Drawing.Point(486, 205);
             this.Stabilizer_toggle_clear_button.Name = "Stabilizer_toggle_clear_button";
