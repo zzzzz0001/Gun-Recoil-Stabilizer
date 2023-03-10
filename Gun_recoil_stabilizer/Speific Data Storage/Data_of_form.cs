@@ -10,7 +10,10 @@ namespace Gun_recoil_stabilizer.Speific_Data_Storage
 {
     public static class Data_of_form
     {
-        public static List<Tuple<int, int>> CSV_STORAGE { get; private set; } = new List<Tuple<int, int>>();
+        //public static List<Tuple<int, int>> CSV_STORAGE { get; private set; } = new List<Tuple<int, int>>();
+
+        //List<dynamic>   ->   we put int[] in the dynamic part
+        public static List<dynamic> CSV_STORAGE { get; private set; } = new List<dynamic>();
 
         public static bool Dataset_chosen { get; private set; } = false;
 
@@ -39,42 +42,43 @@ namespace Gun_recoil_stabilizer.Speific_Data_Storage
             Dataset_chosen = true;
         }
 
-        public static string ADD(List<string> input)
+        public static string ADD(List<string> input, int stabilizer_chosen)   //stabilizer_chosen -> 0 = vertical   1 = Spray Pattern
         {
             Clear_uploaded_docs();
+            bool error_happened = false;
 
             foreach (var piece in input)
             {
-                var pieces = piece.Split(',');
+                var temp = piece.Split(',');
 
-                if (pieces.Count() != 2)
+                List<int> to_add = new List<int>();
+
+                for (int i = 0; i < temp.Length; i++)
                 {
-                    //this means we sent more paramters for no reason column wise
-
-                    return "Please provide two values per row sperated by comma";
+                    try
+                    {
+                        to_add.Add(int.Parse(temp[i]));  //parsing to see if all the values are proper numbers
+                    }
+                    catch (Exception e)
+                    {
+                        to_add.Add(0);
+                        error_happened = true;
+                    }
                 }
-                try
-                {
-                    Tuple<int, int> item = new Tuple<int, int>(int.Parse(pieces[0].Trim()), int.Parse(pieces[1].Trim()));
-                    CSV_STORAGE.Add(item);
-                    Dataset_chosen = true;
-                }
 
-                catch (Exception e)
-                {
-                    if (e.Message == "Input string was not in a correct format.")
-                        return "One or more of the numbers in the csv file cannot be parsed to a number";
-
-                    return e.Message;
-                }
+                CSV_STORAGE.Add(to_add.ToArray());
+                Dataset_chosen = true;
             }
+
+            if (error_happened == true)
+                return "Error happened during importing, glitchy values have been replaced by 0";
 
             return null;
         }
 
         public static void Clear_uploaded_docs()
         {
-            CSV_STORAGE = new List<Tuple<int, int>>();
+            CSV_STORAGE = new List<dynamic>();
             Dataset_chosen = false;
         }
 

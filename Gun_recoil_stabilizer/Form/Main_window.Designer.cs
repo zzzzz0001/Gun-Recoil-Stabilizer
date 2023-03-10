@@ -478,12 +478,13 @@ namespace Gun_recoil_stabilizer
             this.Stabilization_rate_numericupdown.Size = new System.Drawing.Size(130, 38);
             this.Stabilization_rate_numericupdown.TabIndex = 5;
             this.Stabilization_rate_numericupdown.Tag = "Stabilization_rate_numericupdown_tag";
+            this.Stabilization_rate_numericupdown.ValueChanged += new System.EventHandler(this.Stabilization_rate_numericupdown_ValueChanged);
             // 
             // seconds_label1
             // 
             this.seconds_label1.AutoSize = true;
             this.seconds_label1.Font = new System.Drawing.Font("Segoe UI", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.seconds_label1.Location = new System.Drawing.Point(795, 25);
+            this.seconds_label1.Location = new System.Drawing.Point(784, 25);
             this.seconds_label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.seconds_label1.Name = "seconds_label1";
             this.seconds_label1.Size = new System.Drawing.Size(56, 17);
@@ -514,9 +515,11 @@ namespace Gun_recoil_stabilizer
             this.Stabilizer_type_combobox.Name = "Stabilizer_type_combobox";
             this.Stabilizer_type_combobox.Size = new System.Drawing.Size(184, 36);
             this.Stabilizer_type_combobox.TabIndex = 1;
+            this.Stabilizer_type_combobox.SelectedIndexChanged += new System.EventHandler(this.Stabilizer_type_combobox_SelectedIndexChanged);
             // 
             // data_import_spray_pattern_button
             // 
+            this.data_import_spray_pattern_button.Enabled = false;
             this.data_import_spray_pattern_button.Location = new System.Drawing.Point(325, 79);
             this.data_import_spray_pattern_button.Name = "data_import_spray_pattern_button";
             this.data_import_spray_pattern_button.Size = new System.Drawing.Size(105, 36);
@@ -610,6 +613,7 @@ namespace Gun_recoil_stabilizer
             this.Increase_clear_button.TabIndex = 18;
             this.Increase_clear_button.Text = "clear";
             this.Increase_clear_button.UseVisualStyleBackColor = true;
+            this.Increase_clear_button.Click += new System.EventHandler(this.Increase_clear_button_Click);
             // 
             // Decrease_clear_button
             // 
@@ -620,6 +624,7 @@ namespace Gun_recoil_stabilizer
             this.Decrease_clear_button.TabIndex = 19;
             this.Decrease_clear_button.Text = "clear";
             this.Decrease_clear_button.UseVisualStyleBackColor = true;
+            this.Decrease_clear_button.Click += new System.EventHandler(this.Decrease_clear_button_Click);
             // 
             // Stabilizer_toggle_clear_button
             // 
@@ -630,6 +635,7 @@ namespace Gun_recoil_stabilizer
             this.Stabilizer_toggle_clear_button.TabIndex = 20;
             this.Stabilizer_toggle_clear_button.Text = "clear";
             this.Stabilizer_toggle_clear_button.UseVisualStyleBackColor = true;
+            this.Stabilizer_toggle_clear_button.Click += new System.EventHandler(this.Stabilizer_toggle_clear_button_Click);
             // 
             // contextMenuStrip1
             // 
@@ -647,6 +653,7 @@ namespace Gun_recoil_stabilizer
             this.Copy_error_button.Text = "copy error";
             this.Copy_error_button.UseVisualStyleBackColor = true;
             this.Copy_error_button.Visible = false;
+            this.Copy_error_button.Click += new System.EventHandler(this.Copy_error_button_Click);
             // 
             // imported_label
             // 
@@ -666,7 +673,7 @@ namespace Gun_recoil_stabilizer
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 28F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(874, 338);
+            this.ClientSize = new System.Drawing.Size(860, 338);
             this.Controls.Add(this.imported_label);
             this.Controls.Add(this.Copy_error_button);
             this.Controls.Add(this.Stabilizer_toggle_clear_button);

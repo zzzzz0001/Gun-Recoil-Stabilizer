@@ -147,6 +147,8 @@ namespace Gun_recoil_stabilizer.Keystokes
                 Console.WriteLine("hehe" + Data_of_form.Stabilization_rate);
 
 
+                //dont forget to deal with auto off stabilization
+
 
                 Thread.Sleep(Data_of_form.Stabilization_rate);
             }

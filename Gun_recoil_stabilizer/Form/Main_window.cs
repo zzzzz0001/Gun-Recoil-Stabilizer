@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using Gun_recoil_stabilizer.Speific_Data_Storage;
 using Gun_recoil_stabilizer.Keystokes;
 using System.Runtime.InteropServices;
+using System.Threading;
 
 namespace Gun_recoil_stabilizer
 {
@@ -21,8 +22,6 @@ namespace Gun_recoil_stabilizer
         [return: MarshalAs(UnmanagedType.Bool)]
         static extern bool AllocConsole();
 
-        public bool Check_Stabilization_rate_Continous_run { get; set; }
-        public bool Toggle_Stop_Continous_run { get; set; }
 
         public delegate void Stop_delegate_function();
         public Stop_delegate_function Stop_delegate;
@@ -38,9 +37,11 @@ namespace Gun_recoil_stabilizer
             Stop_delegate = new Stop_delegate_function(Stop_function);
             Refresh_delegate = new Refresh_stabilization_numericupdown(REFRESH_STABILIZATION_NUMERICUPDOWN_function);
 
+            //Console.WriteLine(Stabilizer_toggle_keybinding_combobox.SelectedIndex);   //this gives -1 which means nothing is selected
 
         }
 
+        #region event_triggers
         private async void Start_button_Click(object sender, EventArgs e)
         {
             if (Start_button.Text == "Start")
@@ -81,7 +82,7 @@ namespace Gun_recoil_stabilizer
                     Data_of_form.Clear_uploaded_docs();
 
                     if (temp[0] != "")   //provided soemthing in the csv file
-                        state = Data_of_form.ADD(temp);  //adding it to ram directly
+                        state = Data_of_form.ADD(temp, Stabilizer_type_combobox.SelectedIndex);  //adding it to ram directly
 
                     else   //provided nothing in the csv file
                     {
@@ -139,6 +140,54 @@ namespace Gun_recoil_stabilizer
 
         #endregion
 
+        private void auto_off_stabilisation_numericupdown_ValueChanged(object sender, EventArgs e)
+        {
+            //this only works when the increase or decrease button is being pressed which is inbuilt on numbericupdown
+            //this will not get trigger if you type it directly
+
+            Data_of_form.Auto_off_stabilization = (int)((double)auto_off_stabilisation_numericupdown.Value * Math.Pow(10, auto_off_stabilisation_numericupdown.DecimalPlaces));
+
+        }
+
+        private void Stabilization_rate_numericupdown_ValueChanged(object sender, EventArgs e)
+        {
+            Data_of_form.Stabilization_rate = (int)((double)Stabilization_rate_numericupdown.Value * Math.Pow(10, Stabilization_rate_numericupdown.DecimalPlaces));
+        }
+
+        private void Stabilizer_toggle_clear_button_Click(object sender, EventArgs e)
+        {
+            Stabilizer_toggle_keybinding_combobox.SelectedIndex = -1;
+            Stabilizer_toggle_keybinding_combobox.Refresh();
+        }
+
+        private void Increase_clear_button_Click(object sender, EventArgs e)
+        {
+            Increase_stabilization_combobox.SelectedIndex = -1;
+            Increase_stabilization_combobox.Refresh();
+        }
+
+        private void Decrease_clear_button_Click(object sender, EventArgs e)
+        {
+            Decrease_stabilization_combobox.SelectedIndex = -1;
+            Decrease_stabilization_combobox.Refresh();
+        }
+
+        private void Copy_error_button_Click(object sender, EventArgs e)
+        {
+            if (Error_message.Text != "" && Error_message.Visible == true)  //error is not empty
+            {
+                Clipboard.SetText(Error_message.Text);
+            }
+        }
+
+        private void Stabilizer_type_combobox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (Stabilizer_type_combobox.SelectedIndex != -1)
+                data_import_spray_pattern_button.Enabled = true;
+        }
+
+        #endregion
+
         #region my_functions
 
         private bool validation()  //created by me
@@ -171,27 +220,38 @@ namespace Gun_recoil_stabilizer
 
             //CHECK IF TYPE OF STABILISER IS ALSO SELECTED
 
-            if (Stabilizer_type_combobox.AccessibilityObject.Value == "CHOOSE")
+            if (Stabilizer_type_combobox.SelectedIndex == -1)
             {
-                error("Choose atleast one type of Stabilizer");
+                error("Choose at least one type of Stabilizer");
                 return false;
             }
 
             //validating the file
-            else if (Stabilizer_type_combobox.AccessibilityObject.Value == "Spray Pattern")
+            if (Data_of_form.Dataset_chosen == false)   //which means that dataset is not given
             {
-                if (Data_of_form.Dataset_chosen == false)   //which means that dataset is not given
-                {
-                    error("Please provide a valid dataset to use the Stablizer : Spray Pattern");
-                    return false;
-                }
-
-                else if (Data_of_form.CSV_STORAGE.Count == 0)
-                {
-                    error("Please provide atleast one row of dataset to use the Stablizer : Spray Pattern");
-                    return false;
-                }
+                error("Please provide a valid dataset to use the Stablizer : " + Stabilizer_type_combobox.AccessibilityObject.Value);
+                return false;
             }
+
+            else if (Data_of_form.CSV_STORAGE.Count == 0)
+            {
+                error("Please provide atleast one row of dataset to use the Stablizer : " + Stabilizer_type_combobox.AccessibilityObject.Value);
+                return false;
+            }
+            //else if (Stabilizer_type_combobox.AccessibilityObject.Value == "Spray Pattern")
+            //{
+            //    if (Data_of_form.Dataset_chosen == false)   //which means that dataset is not given
+            //    {
+            //        error("Please provide a valid dataset to use the Stablizer : Spray Pattern");
+            //        return false;
+            //    }
+
+            //    else if (Data_of_form.CSV_STORAGE.Count == 0)
+            //    {
+            //        error("Please provide atleast one row of dataset to use the Stablizer : Spray Pattern");
+            //        return false;
+            //    }
+            //}
 
 
             return true;
@@ -245,17 +305,18 @@ namespace Gun_recoil_stabilizer
                 Start_button.Text = "Started";
                 Start_button.BackColor = Color.Green;
 
+                //diable all 3 clear button and changing option for stabilizer and the importing button
+                Stabilizer_toggle_clear_button.Enabled = false;
+                Increase_clear_button.Enabled = false;
+                Decrease_clear_button.Enabled = false;
+                Stabilizer_type_combobox.Enabled = false;
+                data_import_spray_pattern_button.Enabled = false;
+
                 //this is going to run a fucntion that starts a function which captures keys pressed of keybaord and mouse constantly and then we can do further function there
                 Task.Run(() => Keyboard_and_Mouse.START(auto_off_stabilisation_numericupdown.Value, Stabilization_rate_numericupdown.Value, Stabilization_rate_numericupdown.DecimalPlaces, this));  //direcly sending the values of t1 t2 t3 causes the function not to run
 
                 //but somehow the below code which is in synchronous run perfectly fine without t1, t2, t3
                 //Keyboard_and_Mouse.START(auto_off_stabilisation_numericupdown.Value, Stabilization_rate_numericupdown.Value, Stabilization_rate_numericupdown.DecimalPlaces, Increase_stabilization_combobox.Text, Decrease_stabilization_combobox.Text, Stabilizer_toggle_keybinding_combobox.Text);
-
-
-                //another thread to check if any changes occured to stabilization_rate
-                Check_Stabilization_rate_Continous_run = true;
-                //Task.Run(() => Check_Stabilization_rate());   //sending the instance as this is used to edit the value of form
-
 
             }
         }
@@ -264,34 +325,15 @@ namespace Gun_recoil_stabilizer
         {
             Start_button.Text = "Start";
             Start_button.BackColor = Color.Red;
-            Check_Stabilization_rate_Continous_run = false;
-            Toggle_Stop_Continous_run = false;
             Keyboard_and_Mouse.Keyboard_Mouse_Key_Extractor_Continous_Run = false;
             Keyboard_and_Mouse.Mouse_click_Continous_Run = false;
-        }
 
-        public Task Check_Stabilization_rate()
-        {
-            while (Check_Stabilization_rate_Continous_run)
-            {
-                var power = Math.Pow(10, Stabilization_rate_numericupdown.DecimalPlaces);
-                int form_rate = (int)( Stabilization_rate_numericupdown.Value * (decimal)power );
-                int stablization_rate = Data_of_form.Stabilization_rate;
-                if (stablization_rate != form_rate)
-                {
-                    try
-                    {
-                        Stabilization_rate_numericupdown.Value = (decimal)stablization_rate / (decimal)power;
-                    }
-                    catch (Exception e)
-                    {
+            Stabilizer_toggle_clear_button.Enabled = true;
+            Increase_clear_button.Enabled = true;
+            Decrease_clear_button.Enabled = true;
+            Stabilizer_type_combobox.Enabled = true;
+            data_import_spray_pattern_button.Enabled = true;
 
-                    }
-                    Stabilization_rate_numericupdown.Refresh();
-
-                }
-            }
-            return Task.CompletedTask;
         }
 
         public void REFRESH_STABILIZATION_NUMERICUPDOWN_function()
@@ -304,18 +346,11 @@ namespace Gun_recoil_stabilizer
         }
 
 
+
+
+
         #endregion
 
         
-        
-        
-        
-        private void auto_off_stabilisation_numericupdown_ValueChanged(object sender, EventArgs e)
-        {
-            //this only works when the increase or decrease button is being pressed which is inbuilt on numbericupdown
-            //this will not get trigger if you type it directly
-
-
-        }
     }
 }
