@@ -22,7 +22,7 @@ namespace Gun_recoil_stabilizer
         [return: MarshalAs(UnmanagedType.Bool)]
         static extern bool AllocConsole();
 
-
+        //https://learn.microsoft.com/en-gb/dotnet/desktop/winforms/controls/how-to-make-thread-safe-calls-to-windows-forms-controls?view=netframeworkdesktop-4.8
         public delegate void Stop_delegate_function();
         public Stop_delegate_function Stop_delegate;
 

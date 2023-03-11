@@ -13,6 +13,7 @@ using System.Diagnostics;
 using System.Windows.Input;
 using System.IO;
 using Gun_recoil_stabilizer.Speific_Data_Storage;
+using Gun_recoil_stabilizer.WinHelper;
 
 namespace Gun_recoil_stabilizer.Keystokes
 {
@@ -142,15 +143,65 @@ namespace Gun_recoil_stabilizer.Keystokes
 
         public static Task Mouse_click()
         {
+            WinHelper.CursorPosition position = CursorHelper.GetCurrentPosition();
+            Console.WriteLine("Position = " + position.X + " x " + position.Y);
             while (Mouse_click_Continous_Run)
             {
-                Console.WriteLine("hehe" + Data_of_form.Stabilization_rate);
+                //getting of initial position
+                int total_x_moved = 0;
+                int total_y_moved = 0;
 
+                //fixation of recoil
+
+                foreach (var line in Data_of_form.CSV_STORAGE)
+                {
+                    Thread.Sleep(Data_of_form.Stabilization_rate);   //this is needed as first bullet should go out
+                    
+                    var xDelta = (int)line[0];
+                    var yDelta = (int)line[1];
+
+                    var newX = position.X + xDelta;
+                    var newY = position.Y + yDelta;
+                    foreach (var screen in Screen.AllScreens)
+                    {
+                        // is this the screen the cursor is on
+                        var bounds = screen.Bounds;
+                        if (position.X >= bounds.X && position.X <= (bounds.X + bounds.Width))
+                        {
+                            // this is our screen check if the delta will put us out
+                            if (newX < bounds.X || newX > bounds.Right)
+                            {
+                                xDelta = -xDelta;
+                            }
+                            if (newY < bounds.Y || newY > bounds.Bottom)
+                            {
+                                yDelta = -yDelta;
+                            }
+
+                            // we don't need to scan through the rest
+                            break;
+                        }
+                    }
+
+                    CursorHelper.SetPositionRelative(xDelta, yDelta);
+
+                    total_x_moved += xDelta;
+                    total_y_moved += xDelta;
+                    Console.WriteLine("Total x moved = " + total_x_moved + "     Total y moved = " + total_y_moved);
+
+                }
+
+                Thread.Sleep(Data_of_form.Stabilization_rate);
+
+                CursorHelper.SetPositionAbsolute(position);
+
+                position = CursorHelper.GetCurrentPosition();
+                Console.WriteLine("Position = " + position.X + " x " + position.Y);
 
                 //dont forget to deal with auto off stabilization
 
 
-                Thread.Sleep(Data_of_form.Stabilization_rate);
+
             }
 
 
