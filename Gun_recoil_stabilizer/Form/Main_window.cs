@@ -46,6 +46,7 @@ namespace Gun_recoil_stabilizer
         {
             if (Start_button.Text == "Start")
             {
+                Console.Clear();
                 Start_function();
             }
 
