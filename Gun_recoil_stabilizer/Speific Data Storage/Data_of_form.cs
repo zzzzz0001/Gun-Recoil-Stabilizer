@@ -17,6 +17,8 @@ namespace Gun_recoil_stabilizer.Speific_Data_Storage
 
         public static bool Dataset_chosen { get; private set; } = false;
 
+        public static int Stabilizer_type { get; set; } = -1;     //Stabilizer_type -> 0 = vertical   1 = Spray Pattern
+
         public static int Auto_off_stabilization { get; set; } = 0;
 
         public static int Stabilization_rate { get; set; } = 0;
@@ -29,46 +31,65 @@ namespace Gun_recoil_stabilizer.Speific_Data_Storage
 
         //public static Keys Stabilizer_toggle_key { get; set; }
         public static int Stabilizer_toggle_key_int { get; set; }
-        
+
+        public static bool Precise_point_check_box { get; set; }
+
         //public static List<Keys> Keys_inc_dec_tog_leftclick { get; set; } = new List<Keys>();
         public static List<int> Keys_inc_dec_tog_leftclick_int { get; set; } = new List<int>()
         {
             -1, -1, -1, 1   //negative 1 shows that its not sent
         };
 
+        [Obsolete("This Method is Deprecated")]
         public static void ADD(Tuple<int, int> input)
         {
             CSV_STORAGE.Add(input);
             Dataset_chosen = true;
         }
 
-        public static string ADD(List<string> input, int stabilizer_chosen)   //stabilizer_chosen -> 0 = vertical   1 = Spray Pattern
+        public static string ADD(List<string> input)
         {
             Clear_uploaded_docs();
             bool error_happened = false;
 
-            foreach (var piece in input)
+            //header check
+            var header = input[0];
+            var headers = header.Split(',');
+            foreach (var item in headers)
             {
-                var temp = piece.Split(',');
-
-                List<int> to_add = new List<int>();
-
-                for (int i = 0; i < temp.Length; i++)
+                try
                 {
-                    try
-                    {
-                        to_add.Add(int.Parse(temp[i]));  //parsing to see if all the values are proper numbers
-                    }
-                    catch (Exception e)
-                    {
-                        to_add.Add(0);
-                        error_happened = true;
-                    }
+                    int.Parse(item);
                 }
-
-                CSV_STORAGE.Add(to_add.ToArray());
-                Dataset_chosen = true;
+                catch
+                {
+                    //error occurued
+                    //which means that the first line is a header
+                    input.RemoveAt(0);
+                    break;
+                }
             }
+
+            List<dynamic> returned_data = new List<dynamic>();
+
+            switch (Stabilizer_type)
+            {
+                case 0:
+                    {
+                        returned_data = Stabilizers.Stabilizer_reading.Vertical_stabilizer(input);
+                    }
+                    break;
+                case 1:
+                    {
+                        returned_data = Stabilizers.Stabilizer_reading.Spray_pattern_stabilizer(input);
+                    }
+                    break;
+            }
+
+            error_happened = returned_data[0];
+            CSV_STORAGE = returned_data[1];
+            Dataset_chosen = returned_data[2];
+            
 
             if (error_happened == true)
                 return "Error happened during importing, glitchy values have been replaced by 0";

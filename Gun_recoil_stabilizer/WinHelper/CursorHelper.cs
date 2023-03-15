@@ -33,8 +33,8 @@ namespace Gun_recoil_stabilizer.WinHelper
             var res_info = DesktopHelper.GetResolution();
 
             // Absolute coordinates are from 0 to 65536
-            int real_x = (cPos.X * 65536) / res_info.Width;
-            int real_y = (cPos.Y * 65536) / res_info.Height;
+            int real_x = (cPos.X * 65536) / (res_info.Width-1);   //extra negative 1 is being put because of boundary problem by me
+            int real_y = (cPos.Y * 65536) / (res_info.Height-1);   //extra negative 1 is being put because of boundary problem by me
 
             // Create INPUT structure
             var input = new SendInputWrapper.Input();

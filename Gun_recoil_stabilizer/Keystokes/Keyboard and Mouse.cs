@@ -52,9 +52,16 @@ namespace Gun_recoil_stabilizer.Keystokes
                                 Console.WriteLine((Keys)1 + " pressed");
                                 Mouse_click_Continous_Run = true;
                                 
-                                //CancellationTokenRegistration canceltoken = new CancellationTokenRegistration();
+                                //auto off stabilization stuff
+                                CancellationTokenSource source = new CancellationTokenSource();
+                                source.CancelAfter(Data_of_form.Auto_off_stabilization);
 
-                                Task.Run(() => Mouse_click());
+                                if (Data_of_form.Auto_off_stabilization == 0)
+                                {
+                                    Task.Run(() => Mouse_click());
+                                }
+                                else
+                                    Task.Run(() => Mouse_click(source.Token), source.Token);
                             }
                             else if (i == Data_of_form.Stabilizer_toggle_key_int)
                             {
@@ -144,13 +151,14 @@ namespace Gun_recoil_stabilizer.Keystokes
             return Task.CompletedTask;
         }
 
-        public static Task Mouse_click()
+        public static Task Mouse_click(CancellationToken token = default)
         {
             WinHelper.CursorPosition position = CursorHelper.GetCurrentPosition();
             Console.WriteLine("-----------------------------------------------------------------");
             Console.WriteLine("-----------------------------------------------------------------");
             Console.WriteLine("Position = " + position.X + " x " + position.Y);
-            while (Mouse_click_Continous_Run)
+
+            while (Mouse_click_Continous_Run == true)
             {
                 //getting of initial position
                 int total_x_moved = 0;
@@ -160,10 +168,36 @@ namespace Gun_recoil_stabilizer.Keystokes
 
                 foreach (var line in Data_of_form.CSV_STORAGE)
                 {
+                    if (token != default && token.IsCancellationRequested == true)
+                        return Task.CompletedTask;
+
                     Thread.Sleep(Data_of_form.Stabilization_rate);   //this is needed as first bullet should go out
 
-                    var xDelta = (int)line[0];
-                    var yDelta = (int)line[1];
+                    if (token != default && token.IsCancellationRequested == true)
+                        return Task.CompletedTask;
+
+                    int xDelta = 0, yDelta = 0;
+
+                    switch (Data_of_form.Stabilizer_type)
+                    {
+                        case 0:
+                            {
+                                xDelta = 0;
+                                yDelta = (int)line;
+                            }
+                            break;
+                        case 1:
+                            {
+                                xDelta = (int)line[0];
+                                yDelta = (int)line[1];
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                    
+
+                    
 
                     //var newX = position.X + xDelta;
                     //var newY = position.Y + yDelta;
@@ -242,10 +276,6 @@ namespace Gun_recoil_stabilizer.Keystokes
                 position = CursorHelper.GetCurrentPosition();
                 Console.WriteLine("Position = " + position.X + " x " + position.Y);
 
-                //dont forget to deal with auto off stabilization
-
-
-
             }
 
             //while (true)
@@ -272,16 +302,11 @@ namespace Gun_recoil_stabilizer.Keystokes
         /// <param name="Decrease_stablilization_rate_key"></param>
         /// <param name="Stabilizer_toggle_key"></param>
         /// <returns></returns>
-        public static Task START(decimal Auto_off_stabilization, decimal Stabilization_rate, int precision_for_stabilization_time, Main_window form) //, string Increase_stabilization_rate_key, string Decrease_stablilization_rate_key, string Stabilizer_toggle_key
+        public static Task START(Main_window form) //, string Increase_stabilization_rate_key, string Decrease_stablilization_rate_key, string Stabilizer_toggle_key
         {
             Keyboard_Mouse_Key_Extractor_Continous_Run = true;
 
             formcontrol = form;
-
-            Data_of_form.Auto_off_stabilization = (int)(Auto_off_stabilization * (decimal)Math.Pow(10, precision_for_stabilization_time));
-
-            Data_of_form.Stabilization_rate = (int)(Stabilization_rate * (decimal)Math.Pow(10, precision_for_stabilization_time));
-
 
             Keyboard_Mouse_Key_Extractor();
 

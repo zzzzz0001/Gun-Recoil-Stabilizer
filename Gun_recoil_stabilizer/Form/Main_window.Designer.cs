@@ -54,6 +54,7 @@ namespace Gun_recoil_stabilizer
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.Copy_error_button = new System.Windows.Forms.Button();
             this.imported_label = new System.Windows.Forms.Label();
+            this.Precise_point_checkBox = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.Stabilization_rate_numericupdown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.auto_off_stabilisation_numericupdown)).BeginInit();
             this.SuspendLayout();
@@ -671,12 +672,24 @@ namespace Gun_recoil_stabilizer
             this.imported_label.Text = "successfully imported";
             this.imported_label.Visible = false;
             // 
+            // Precise_point_checkBox
+            // 
+            this.Precise_point_checkBox.AutoSize = true;
+            this.Precise_point_checkBox.Location = new System.Drawing.Point(138, 108);
+            this.Precise_point_checkBox.Name = "Precise_point_checkBox";
+            this.Precise_point_checkBox.Size = new System.Drawing.Size(146, 32);
+            this.Precise_point_checkBox.TabIndex = 23;
+            this.Precise_point_checkBox.Text = "Precise point";
+            this.Precise_point_checkBox.UseVisualStyleBackColor = true;
+            this.Precise_point_checkBox.CheckedChanged += new System.EventHandler(this.Precise_point_checkBox_CheckedChanged);
+            // 
             // Main_window
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 28F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(860, 338);
+            this.Controls.Add(this.Precise_point_checkBox);
             this.Controls.Add(this.imported_label);
             this.Controls.Add(this.Copy_error_button);
             this.Controls.Add(this.Stabilizer_toggle_clear_button);
@@ -737,6 +750,7 @@ namespace Gun_recoil_stabilizer
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.Button Copy_error_button;
         private System.Windows.Forms.Label imported_label;
+        private System.Windows.Forms.CheckBox Precise_point_checkBox;
     }
 }
 

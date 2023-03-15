@@ -37,6 +37,23 @@ namespace Gun_recoil_stabilizer
             Stop_delegate = new Stop_delegate_function(Stop_function);
             Refresh_delegate = new Refresh_stabilization_numericupdown(REFRESH_STABILIZATION_NUMERICUPDOWN_function);
 
+            //while (true)
+            //{
+            //    foreach (var screen in Screen.AllScreens)
+            //    {
+            //        Console.WriteLine("Device name = " + screen.DeviceName);
+            //        Console.WriteLine("X = " + screen.Bounds.X + "      Y = " + screen.Bounds.Y);
+            //        Console.WriteLine("Width = " + screen.Bounds.Width + "      Height = " + screen.Bounds.Height);
+            //    }
+
+            //    WinHelper.CursorPosition position = WinHelper.CursorHelper.GetCurrentPosition();
+            //    Console.WriteLine("Mouse position X = " + position.X + "     Y = " + position.Y);
+
+            //    Thread.Sleep(150);
+            //    Console.Clear();
+            //}
+
+
             //Console.WriteLine(Stabilizer_toggle_keybinding_combobox.SelectedIndex);   //this gives -1 which means nothing is selected
 
         }
@@ -83,7 +100,7 @@ namespace Gun_recoil_stabilizer
                     Data_of_form.Clear_uploaded_docs();
 
                     if (temp[0] != "")   //provided soemthing in the csv file
-                        state = Data_of_form.ADD(temp, Stabilizer_type_combobox.SelectedIndex);  //adding it to ram directly
+                        state = Data_of_form.ADD(temp);  //adding it to ram directly
 
                     else   //provided nothing in the csv file
                     {
@@ -188,7 +205,16 @@ namespace Gun_recoil_stabilizer
         private void Stabilizer_type_combobox_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (Stabilizer_type_combobox.SelectedIndex != -1)
+            {
                 data_import_spray_pattern_button.Enabled = true;
+                Data_of_form.Stabilizer_type = Stabilizer_type_combobox.SelectedIndex;
+            }
+                
+        }
+
+        private void Precise_point_checkBox_CheckedChanged(object sender, EventArgs e)
+        {
+            Data_of_form.Precise_point_check_box = Precise_point_checkBox.Checked;
         }
 
         #endregion
@@ -317,11 +343,14 @@ namespace Gun_recoil_stabilizer
                 Stabilizer_type_combobox.Enabled = false;
                 data_import_spray_pattern_button.Enabled = false;
 
-                //this is going to run a fucntion that starts a function which captures keys pressed of keybaord and mouse constantly and then we can do further function there
-                Task.Run(() => Keyboard_and_Mouse.START(auto_off_stabilisation_numericupdown.Value, Stabilization_rate_numericupdown.Value, Stabilization_rate_numericupdown.DecimalPlaces, this));  //direcly sending the values of t1 t2 t3 causes the function not to run
 
-                //but somehow the below code which is in synchronous run perfectly fine without t1, t2, t3
-                //Keyboard_and_Mouse.START(auto_off_stabilisation_numericupdown.Value, Stabilization_rate_numericupdown.Value, Stabilization_rate_numericupdown.DecimalPlaces, Increase_stabilization_combobox.Text, Decrease_stabilization_combobox.Text, Stabilizer_toggle_keybinding_combobox.Text);
+                //filled out the Data_of_forms first
+                Data_of_form.Auto_off_stabilization = (int)(auto_off_stabilisation_numericupdown.Value * (decimal)Math.Pow(10, Stabilization_rate_numericupdown.DecimalPlaces));
+                Data_of_form.Stabilization_rate = (int)(Stabilization_rate_numericupdown.Value * (decimal)Math.Pow(10, Stabilization_rate_numericupdown.DecimalPlaces));
+
+                //this is going to run a function that starts a function which captures keys pressed of keybaord and mouse constantly and then we can do further function there
+                Task.Run(() => Keyboard_and_Mouse.START(this));
+
 
             }
         }
@@ -349,6 +378,7 @@ namespace Gun_recoil_stabilizer
 
 
         }
+
 
 
 
