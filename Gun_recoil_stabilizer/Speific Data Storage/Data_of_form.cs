@@ -5,12 +5,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Gun_recoil_stabilizer;
+using Gun_recoil_stabilizer.Keystokes;
 
 namespace Gun_recoil_stabilizer.Speific_Data_Storage
 {
     public static class Data_of_form
     {
-        //public static List<Tuple<int, int>> CSV_STORAGE { get; private set; } = new List<Tuple<int, int>>();
+        public static Main_window formcontrol { get; set; }
+        public static bool Status { get; set; } = false;     //false means stopped, true means started
 
         //List<dynamic>   ->   we put int[] in the dynamic part
         public static List<dynamic> CSV_STORAGE { get; private set; } = new List<dynamic>();
@@ -23,22 +25,20 @@ namespace Gun_recoil_stabilizer.Speific_Data_Storage
 
         public static int Stabilization_rate { get; set; } = 0;
 
-        //public static Keys Increase_stabilization_rate_key { get; set; }
         public static int Increase_stabilization_rate_key_int { get; set; }
 
-        //public static Keys Decrease_stabililization_rate_key { get; set; }
         public static int Decrease_stabililization_rate_key_int { get; set; }
 
-        //public static Keys Stabilizer_toggle_key { get; set; }
         public static int Stabilizer_toggle_key_int { get; set; }
 
         public static bool Precise_point_check_box { get; set; }
 
-        //public static List<Keys> Keys_inc_dec_tog_leftclick { get; set; } = new List<Keys>();
-        public static List<int> Keys_inc_dec_tog_leftclick_int { get; set; } = new List<int>()
+        public static List<int> Keys_inc_dec_tog_int { get; set; } = new List<int>()
         {
-            -1, -1, -1, 1   //negative 1 shows that its not sent
+            -1, -1, -1
         };
+
+        //public static Task Keyboard_extractor_task { get; set; } = null;
 
         [Obsolete("This Method is Deprecated")]
         public static void ADD(Tuple<int, int> input)
@@ -105,6 +105,10 @@ namespace Gun_recoil_stabilizer.Speific_Data_Storage
 
         public static void String_to_Keys_and_store(string Increase_stabilization_rate_key_ = null, string Decrease_stablilization_rate_key_ = null, string Stabilizer_toggle_key_ = null)
         {
+            //if not started, starting up the keyboard_extractor function
+            //if (Keyboard_extractor_task == null)
+            //    Keyboard_extractor_task = Task.Run(() => Keyboard_and_Mouse.Keyboard_Key_Extractor());   //this would run forever
+
             //   Increase_stabilization_rate_key = Increase_stabilization_rate_key_;
 
             //finding the byte value of it
@@ -113,9 +117,7 @@ namespace Gun_recoil_stabilizer.Speific_Data_Storage
             {
                 Increase_stabilization_rate_key_int = Mapping_from_myname_to_key_valuye[Increase_stabilization_rate_key_];
 
-
-                Keys_inc_dec_tog_leftclick_int[0] = Increase_stabilization_rate_key_int;
-                //Increase_stabilization_rate_key = (Keys)Increase_stabilization_rate_key_int;
+                Keys_inc_dec_tog_int[0] = Increase_stabilization_rate_key_int;
             }
             
 
@@ -123,8 +125,7 @@ namespace Gun_recoil_stabilizer.Speific_Data_Storage
             {
                 Decrease_stabililization_rate_key_int = Mapping_from_myname_to_key_valuye[Decrease_stablilization_rate_key_];
                
-                Keys_inc_dec_tog_leftclick_int[1] = Decrease_stabililization_rate_key_int;
-                //Decrease_stabililization_rate_key = (Keys)Decrease_stabililization_rate_key_int;
+                Keys_inc_dec_tog_int[1] = Decrease_stabililization_rate_key_int;
             }
             
 
@@ -132,16 +133,8 @@ namespace Gun_recoil_stabilizer.Speific_Data_Storage
             {
                 Stabilizer_toggle_key_int = Mapping_from_myname_to_key_valuye[Stabilizer_toggle_key_];
 
-                Keys_inc_dec_tog_leftclick_int[2] = Stabilizer_toggle_key_int;
-                //Stabilizer_toggle_key = (Keys)Stabilizer_toggle_key_int;
+                Keys_inc_dec_tog_int[2] = Stabilizer_toggle_key_int;
             }
-            
-
-            //Keys_inc_dec_tog_leftclick.Add(Increase_stabilization_rate_key);
-            //Keys_inc_dec_tog_leftclick.Add(Decrease_stabililization_rate_key);
-            //Keys_inc_dec_tog_leftclick.Add(Stabilizer_toggle_key);
-            //Keys_inc_dec_tog_leftclick.Add(Keys.LButton);
-
             
         }
 

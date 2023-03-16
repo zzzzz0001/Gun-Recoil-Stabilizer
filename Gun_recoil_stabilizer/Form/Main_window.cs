@@ -26,6 +26,9 @@ namespace Gun_recoil_stabilizer
         public delegate void Stop_delegate_function();
         public Stop_delegate_function Stop_delegate;
 
+        public delegate void Start_function_delegate_for_toggle_start();
+        public Start_function_delegate_for_toggle_start Start_function_delegate;
+
         public delegate void Refresh_stabilization_numericupdown();
         public Refresh_stabilization_numericupdown Refresh_delegate;
 
@@ -36,6 +39,9 @@ namespace Gun_recoil_stabilizer
 
             Stop_delegate = new Stop_delegate_function(Stop_function);
             Refresh_delegate = new Refresh_stabilization_numericupdown(REFRESH_STABILIZATION_NUMERICUPDOWN_function);
+            Start_function_delegate = new Start_function_delegate_for_toggle_start(Start_function);
+
+            Data_of_form.formcontrol = this;
 
             //while (true)
             //{
@@ -178,6 +184,8 @@ namespace Gun_recoil_stabilizer
             Stabilizer_toggle_keybinding_combobox.SelectedIndex = -1;
             Stabilizer_toggle_keybinding_combobox.Refresh();
             Stabilizer_toggle_clear_button.Enabled= false;
+
+            Data_of_form.Keys_inc_dec_tog_int[2] = -1;
         }
 
         private void Increase_clear_button_Click(object sender, EventArgs e)
@@ -185,6 +193,8 @@ namespace Gun_recoil_stabilizer
             Increase_stabilization_combobox.SelectedIndex = -1;
             Increase_stabilization_combobox.Refresh();
             Increase_clear_button.Enabled = false;
+
+            Data_of_form.Keys_inc_dec_tog_int[0] = -1;
         }
 
         private void Decrease_clear_button_Click(object sender, EventArgs e)
@@ -192,6 +202,8 @@ namespace Gun_recoil_stabilizer
             Decrease_stabilization_combobox.SelectedIndex = -1;
             Decrease_stabilization_combobox.Refresh();
             Decrease_clear_button.Enabled = false;
+
+            Data_of_form.Keys_inc_dec_tog_int[1] = -1;
         }
 
         private void Copy_error_button_Click(object sender, EventArgs e)
@@ -347,9 +359,10 @@ namespace Gun_recoil_stabilizer
                 //filled out the Data_of_forms first
                 Data_of_form.Auto_off_stabilization = (int)(auto_off_stabilisation_numericupdown.Value * (decimal)Math.Pow(10, Stabilization_rate_numericupdown.DecimalPlaces));
                 Data_of_form.Stabilization_rate = (int)(Stabilization_rate_numericupdown.Value * (decimal)Math.Pow(10, Stabilization_rate_numericupdown.DecimalPlaces));
+                Data_of_form.Status = true;
 
                 //this is going to run a function that starts a function which captures keys pressed of keybaord and mouse constantly and then we can do further function there
-                Task.Run(() => Keyboard_and_Mouse.START(this));
+                Task.Run(() => Keyboard_and_Mouse.START());
 
 
             }
@@ -359,14 +372,16 @@ namespace Gun_recoil_stabilizer
         {
             Start_button.Text = "Start";
             Start_button.BackColor = Color.Red;
-            Keyboard_and_Mouse.Keyboard_Mouse_Key_Extractor_Continous_Run = false;
+            Keyboard_and_Mouse.Mouse_Key_Extractor_Continous_Run = false;
             Keyboard_and_Mouse.Mouse_click_Continous_Run = false;
+            Data_of_form.Status = false;
 
             Stabilizer_toggle_clear_button.Enabled = true;
             Increase_clear_button.Enabled = true;
             Decrease_clear_button.Enabled = true;
             Stabilizer_type_combobox.Enabled = true;
             data_import_spray_pattern_button.Enabled = true;
+
 
         }
 

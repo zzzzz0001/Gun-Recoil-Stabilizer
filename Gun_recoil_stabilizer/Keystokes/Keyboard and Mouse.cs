@@ -19,86 +19,52 @@ namespace Gun_recoil_stabilizer.Keystokes
 {
     public class Keyboard_and_Mouse
     {
-        public static bool Keyboard_Mouse_Key_Extractor_Continous_Run { get; set; }
+        public static bool Mouse_Key_Extractor_Continous_Run { get; set; }
 
         public static bool Mouse_click_Continous_Run { get; set; }
-
-        public static Main_window formcontrol { get; set; }
 
         [DllImport("user32.dll")]
         private static extern int GetAsyncKeyState(Int32 i);  //ref : https://hackmag.com/coding/diy-keylogger/
 
-        private static Task Keyboard_Mouse_Key_Extractor()
+        private static Task Mouse_extractor()
         {
             #region track_keymap_we_applied_in_form_and_left_click_of_mouse
-            List<Keys> pressed_set = new List<Keys>();
+            bool pressed_set = false;
 
-            while (Keyboard_Mouse_Key_Extractor_Continous_Run)
+            while (Mouse_Key_Extractor_Continous_Run)
             {
-                foreach (var i in Data_of_form.Keys_inc_dec_tog_leftclick_int)  //no need to run through everything
+                int state = GetAsyncKeyState(1);
+                if (state != 0)
                 {
-                    if (i == -1)
-                        continue;
-                    int state = GetAsyncKeyState(i);
-                    if (state != 0)
+                    if (pressed_set == false)  //key is going to be pressed
                     {
-                        if (pressed_set.Contains((Keys)i) == false)  //key is going to be pressed
+                        //Console.WriteLine(((Keys)i).ToString() + " pressed. Key value = " + i);
+                        pressed_set = true;
+
+
+                        Console.WriteLine(Keys.LButton + " pressed");
+                        Mouse_click_Continous_Run = true;
+
+                        //auto off stabilization stuff
+                        CancellationTokenSource source = new CancellationTokenSource();
+                        source.CancelAfter(Data_of_form.Auto_off_stabilization);
+
+                        if (Data_of_form.Auto_off_stabilization == 0)
                         {
-                            //Console.WriteLine(((Keys)i).ToString() + " pressed. Key value = " + i);
-                            pressed_set.Add((Keys)i);
-
-                            if (i == 1)
-                            {
-                                Console.WriteLine((Keys)1 + " pressed");
-                                Mouse_click_Continous_Run = true;
-                                
-                                //auto off stabilization stuff
-                                CancellationTokenSource source = new CancellationTokenSource();
-                                source.CancelAfter(Data_of_form.Auto_off_stabilization);
-
-                                if (Data_of_form.Auto_off_stabilization == 0)
-                                {
-                                    Task.Run(() => Mouse_click());
-                                }
-                                else
-                                    Task.Run(() => Mouse_click(source.Token), source.Token);
-                            }
-                            else if (i == Data_of_form.Stabilizer_toggle_key_int)
-                            {
-                                STOP();
-                            }
-                            else if (i == Data_of_form.Increase_stabilization_rate_key_int)
-                            {
-                                Data_of_form.Stabilization_rate += 1; //this can change the data in Date_of_form and a thread would be running in Main_window.cs file which can check and change it in the form
-                                REFRESH_STABILIZATION_NUMERICUPDOWN();
-                            }
-                            else //the last one can only be decrease stabilisation
-                            {
-                                if (Data_of_form.Stabilization_rate > 0)
-                                {
-                                    Data_of_form.Stabilization_rate -= 1;  //this can change the data in Date_of_form and a thread would be running in Main_window.cs file which can check and change it in the form
-                                    REFRESH_STABILIZATION_NUMERICUPDOWN();
-                                }
-                            }
+                            Task.Run(() => Mouse_click());
                         }
-
-                        else  //Key has been pressed already
-                        {
-                            //ignore mulitple of them
-                        }
+                        else
+                            Task.Run(() => Mouse_click(source.Token), source.Token);
                     }
-                    else  //not pressed
+                }
+                else  //not pressed
+                {
+                    if (pressed_set == true)
                     {
-                        if (pressed_set.Contains((Keys)i) == true)
-                        {
-                            if (i == 1)
-                            {
-                                Mouse_click_Continous_Run = false;
-                            }
+                        Mouse_click_Continous_Run = false;
 
-                            Console.WriteLine(((Keys)i).ToString() + " released. Key value = " + i);
-                            pressed_set.Remove((Keys)i);
-                        }
+                        Console.WriteLine(Keys.LButton.ToString() + " released. Key value = " + 1);
+                        pressed_set = false;
                     }
                 }
             }
@@ -149,6 +115,63 @@ namespace Gun_recoil_stabilizer.Keystokes
             #endregion
 
             return Task.CompletedTask;
+        }
+
+        public static Task Keyboard_Key_Extractor()
+        {
+            List<Keys> pressed_set = new List<Keys>();
+
+            while (true)
+            {
+                var hotkey = Data_of_form.Keys_inc_dec_tog_int.ToList(); //has to do ToList() as we dont need copy by reference as it could break the foreach loop if the variable change while its running
+                foreach (var i in hotkey)  //no need to run through everything
+                {
+                    if (i == -1)
+                        continue;
+                    int state = GetAsyncKeyState(i);
+
+                    if (state != 0)
+                    {
+                        if (pressed_set.Contains((Keys)i) == false)  //key is going to be pressed
+                        {
+                            //Console.WriteLine(((Keys)i).ToString() + " pressed. Key value = " + i);
+                            pressed_set.Add((Keys)i);
+
+                            if (i == Data_of_form.Stabilizer_toggle_key_int)
+                            {
+                                if (Data_of_form.Status == true)
+                                    Task.Run(() => STOP());
+                                else
+                                    Task.Run(() => START_from_button_action_delegate());
+                            }
+                            else if (i == Data_of_form.Increase_stabilization_rate_key_int)
+                            {
+                                Data_of_form.Stabilization_rate += 1; //this can change the data in Date_of_form and a thread would be running in Main_window.cs file which can check and change it in the form
+                                REFRESH_STABILIZATION_NUMERICUPDOWN();
+                            }
+                            else //the last one can only be decrease stabilisation
+                            {
+                                if (Data_of_form.Stabilization_rate > 0)
+                                {
+                                    Data_of_form.Stabilization_rate -= 1;  //this can change the data in Date_of_form and a thread would be running in Main_window.cs file which can check and change it in the form
+                                    REFRESH_STABILIZATION_NUMERICUPDOWN();
+                                }
+                            }
+                        }
+                    }
+
+                    else  //not pressed
+                    {
+                        if (pressed_set.Contains((Keys)i) == true)
+                        {
+                            Console.WriteLine(((Keys)i).ToString() + " released. Key value = " + i);
+                            pressed_set.Remove((Keys)i);
+                        }
+                    }
+
+                }
+            }
+
         }
 
         public static Task Mouse_click(CancellationToken token = default)
@@ -271,7 +294,7 @@ namespace Gun_recoil_stabilizer.Keystokes
 
                 Thread.Sleep(Data_of_form.Stabilization_rate);
 
-                CursorHelper.SetPositionAbsolute(position);
+                //CursorHelper.SetPositionAbsolute(position);
 
                 position = CursorHelper.GetCurrentPosition();
                 Console.WriteLine("Position = " + position.X + " x " + position.Y);
@@ -302,30 +325,36 @@ namespace Gun_recoil_stabilizer.Keystokes
         /// <param name="Decrease_stablilization_rate_key"></param>
         /// <param name="Stabilizer_toggle_key"></param>
         /// <returns></returns>
-        public static Task START(Main_window form) //, string Increase_stabilization_rate_key, string Decrease_stablilization_rate_key, string Stabilizer_toggle_key
+        public static Task START() //, string Increase_stabilization_rate_key, string Decrease_stablilization_rate_key, string Stabilizer_toggle_key
         {
-            Keyboard_Mouse_Key_Extractor_Continous_Run = true;
+            Mouse_Key_Extractor_Continous_Run = true;
 
-            formcontrol = form;
-
-            Keyboard_Mouse_Key_Extractor();
+            Mouse_extractor();
 
             return Task.CompletedTask;
         }
 
-        public static void STOP()
+        public static Task STOP()
         {
-            Keyboard_Mouse_Key_Extractor_Continous_Run = false;
+            Mouse_Key_Extractor_Continous_Run = false;
             Mouse_click_Continous_Run = false;
 
-            formcontrol.Invoke(formcontrol.Stop_delegate);
+            Data_of_form.formcontrol.Invoke(Data_of_form.formcontrol.Stop_delegate);
+
+            return Task.CompletedTask;
 
             //also make sure the colour and text changes back as it could be triggered from the toggle key
         }
 
+        public static Task START_from_button_action_delegate()
+        {
+            Data_of_form.formcontrol.Invoke(Data_of_form.formcontrol.Start_function_delegate);
+            return Task.CompletedTask;
+        }
+
         public static void REFRESH_STABILIZATION_NUMERICUPDOWN()
         {
-            formcontrol.Invoke(formcontrol.Refresh_delegate);
+            Data_of_form.formcontrol.Invoke(Data_of_form.formcontrol.Refresh_delegate);
         }
     }
 
