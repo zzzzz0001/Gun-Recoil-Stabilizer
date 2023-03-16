@@ -704,7 +704,7 @@ namespace Gun_recoil_stabilizer
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Main_window";
-            this.Text = "Recoil Stabilizer";
+            this.Text = "public ";
             ((System.ComponentModel.ISupportInitialize)(this.Stabilization_rate_numericupdown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.auto_off_stabilisation_numericupdown)).EndInit();
             this.ResumeLayout(false);

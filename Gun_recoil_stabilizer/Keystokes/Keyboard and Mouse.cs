@@ -133,97 +133,169 @@ namespace Gun_recoil_stabilizer.Keystokes
             Console.WriteLine("-----------------------------------------------------------------");
             Console.WriteLine("Position = " + position.X + " x " + position.Y);
 
-            while (Mouse_click_Continous_Run == true)
+            if (Data_of_form.Stabilizer_type == 1)
             {
-                //getting of initial position
-                int total_x_moved = 0;
-                int total_y_moved = 0;
-
-                //fixation of recoil
-
-                foreach (var line in Data_of_form.CSV_STORAGE)
+                while (Mouse_click_Continous_Run == true)
                 {
-                    if (token != default && token.IsCancellationRequested == true)
-                        return Task.CompletedTask;
+                    //getting of initial position
+                    int total_x_moved = 0;
+                    int total_y_moved = 0;
 
-                    Thread.Sleep(Data_of_form.Stabilization_rate);   //this is needed as first bullet should go out
 
-                    if (token != default && token.IsCancellationRequested == true)
-                        return Task.CompletedTask;
-
-                    int xDelta = 0, yDelta = 0;
-
-                    switch (Data_of_form.Stabilizer_type)
+                    foreach (var line in Data_of_form.Spray_Data_points)
                     {
-                        case 0:
-                            {
-                                xDelta = 0;
-                                yDelta = (int)line;
-                            }
-                            break;
-                        case 1:
-                            {
-                                xDelta = (int)line[0];
-                                yDelta = (int)line[1];
-                            }
-                            break;
-                        default:
-                            break;
-                    }
+                        if (token != default && token.IsCancellationRequested == true)
+                            return Task.CompletedTask;
 
-                    #region anti_anti_cheat_movement_mouse
-                    int loop_run = 0;
-                    loop_run = Math.Max(Math.Abs(xDelta), Math.Abs(yDelta));
+                        Thread.Sleep(Data_of_form.Stabilization_rate);   //this is needed as first bullet should go out
 
-                    total_x_moved += xDelta;
-                    total_y_moved += xDelta;
+                        if (token != default && token.IsCancellationRequested == true)
+                            return Task.CompletedTask;
 
-                    while (loop_run > 0)
-                    {
-                        int x, y;
+                        int xDelta = 0, yDelta = 0;
+
+                        xDelta = (int)line[0];
+                        yDelta = (int)line[1];
+
                         
-                        if (xDelta > 0)
+                        #region anti_anti_cheat_movement_mouse
+                        int loop_run = 0;
+                        loop_run = Math.Max(Math.Abs(xDelta), Math.Abs(yDelta));
+
+                        total_x_moved += xDelta;
+                        total_y_moved += xDelta;
+
+                        while (loop_run > 0)
                         {
-                            xDelta--;
-                            x = 1;
-                        }
-                        else if (xDelta == 0)
-                            x = 0;
-                        else
-                        {
-                            xDelta++;
-                            x = -1;
+                            int x, y;
+
+                            if (xDelta > 0)
+                            {
+                                xDelta--;
+                                x = 1;
+                            }
+                            else if (xDelta == 0)
+                                x = 0;
+                            else
+                            {
+                                xDelta++;
+                                x = -1;
+                            }
+
+                            if (yDelta > 0)
+                            {
+                                yDelta--;
+                                y = 1;
+                            }
+                            else if (yDelta == 0)
+                                y = 0;
+                            else
+                            {
+                                yDelta++;
+                                y = -1;
+                            }
+
+                            CursorHelper.SetPositionRelative(x, y);
+                            loop_run--;
                         }
 
-                        if (yDelta > 0)
-                        {
-                            yDelta--;
-                            y = 1;
-                        }
-                        else if (yDelta == 0)
-                            y = 0;
-                        else
-                        {
-                            yDelta++;
-                            y = -1;
-                        }
+                        #endregion
 
-                        CursorHelper.SetPositionRelative(x, y);
-                        loop_run--;
+                        Console.WriteLine("Total x moved = " + total_x_moved + "     Total y moved = " + total_y_moved);
+
                     }
 
-                    #endregion
+                    Thread.Sleep(Data_of_form.Stabilization_rate);
+                    //Thread.Sleep(timeout: );
 
-                    Console.WriteLine("Total x moved = " + total_x_moved + "     Total y moved = " + total_y_moved);
+                    position = CursorHelper.GetCurrentPosition();
+                    Console.WriteLine("Position = " + position.X + " x " + position.Y);
 
                 }
-
-                Thread.Sleep(Data_of_form.Stabilization_rate);
-
-                position = CursorHelper.GetCurrentPosition();
-                Console.WriteLine("Position = " + position.X + " x " + position.Y);
-
             }
+
+            else if (Data_of_form.Stabilizer_type == 0)
+            {
+                while (Mouse_click_Continous_Run == true)
+                {
+                    //getting of initial position
+                    int total_x_moved = 0;
+                    int total_y_moved = 0;
+
+
+                    foreach (var line in Data_of_form.Vertical_Data_points)
+                    {
+                        if (token != default && token.IsCancellationRequested == true)
+                            return Task.CompletedTask;
+
+                        Thread.Sleep(Data_of_form.Stabilization_rate);   //this is needed as first bullet should go out
+
+                        if (token != default && token.IsCancellationRequested == true)
+                            return Task.CompletedTask;
+
+                        int xDelta = 0, yDelta = 0;
+
+                        xDelta = 0;
+                        yDelta = line;
+
+
+                        #region anti_anti_cheat_movement_mouse
+                        int loop_run = 0;
+                        loop_run = Math.Max(Math.Abs(xDelta), Math.Abs(yDelta));
+
+                        total_x_moved += xDelta;
+                        total_y_moved += xDelta;
+
+                        while (loop_run > 0)
+                        {
+                            int x, y;
+
+                            if (xDelta > 0)
+                            {
+                                xDelta--;
+                                x = 1;
+                            }
+                            else if (xDelta == 0)
+                                x = 0;
+                            else
+                            {
+                                xDelta++;
+                                x = -1;
+                            }
+
+                            if (yDelta > 0)
+                            {
+                                yDelta--;
+                                y = 1;
+                            }
+                            else if (yDelta == 0)
+                                y = 0;
+                            else
+                            {
+                                yDelta++;
+                                y = -1;
+                            }
+
+                            CursorHelper.SetPositionRelative(x, y);
+                            loop_run--;
+                        }
+
+                        #endregion
+
+                        Console.WriteLine("Total x moved = " + total_x_moved + "     Total y moved = " + total_y_moved);
+
+                    }
+
+                    Thread.Sleep(Data_of_form.Stabilization_rate);
+                    //Thread.Sleep(timeout: );
+
+                    position = CursorHelper.GetCurrentPosition();
+                    Console.WriteLine("Position = " + position.X + " x " + position.Y);
+
+                }
+            }
+            
+            
 
             return Task.CompletedTask;
         }

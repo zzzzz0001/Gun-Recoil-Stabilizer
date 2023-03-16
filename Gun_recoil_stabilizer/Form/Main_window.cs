@@ -85,7 +85,8 @@ namespace Gun_recoil_stabilizer
 
             OpenFileDialog openFileDialog = new OpenFileDialog();
 
-            openFileDialog.Filter = "CSV|*.csv";   //restricting to csv uses only
+            /*openFileDialog.Filter = "CSV|*.csv";*/   //restricting to csv uses only
+            openFileDialog.Filter = "JSON|*.json";
 
             DialogResult result = openFileDialog.ShowDialog(); // Show the dialog.  Right after this code, the browser window pop up
 
@@ -96,22 +97,27 @@ namespace Gun_recoil_stabilizer
                 imported_label.Visible = false;
                 Data_of_form.Clear_uploaded_docs();
 
-                string file = openFileDialog.FileName;   //variable file will be containing the fully defined path of the csv file
+                string file = openFileDialog.FileName;
                 string state = null;
                 try
                 {
-                    var temp = File.ReadLines(file).ToList();
+                    //var temp = File.ReadLines(file).ToList();
+                    var temp = File.ReadAllText(file);
 
                     imported_label.Visible = false;
                     Data_of_form.Clear_uploaded_docs();
 
-                    if (temp[0] != "")   //provided soemthing in the csv file
-                        state = Data_of_form.ADD(temp);  //adding it to ram directly
+                    Data_of_form.ADD(temp);
 
-                    else   //provided nothing in the csv file
-                    {
-                        error("CSV file provided is empty");
-                    }
+                    REFRESH_FORM_AFTER_JSON_IMPORT();
+
+                    //if (temp[0] != "")   //provided soemthing in the csv file
+                    //    state = Data_of_form.ADD(temp);  //adding it to ram directly
+
+                    //else   //provided nothing in the csv file
+                    //{
+                    //    error("CSV file provided is empty");
+                    //}
                         
                     
                 }
@@ -271,7 +277,7 @@ namespace Gun_recoil_stabilizer
                 return false;
             }
 
-            else if (Data_of_form.CSV_STORAGE.Count == 0)
+            else if (Data_of_form.Spray_Data_points.Count == 0)
             {
                 error("Please provide atleast one row of dataset to use the Stablizer : " + Stabilizer_type_combobox.AccessibilityObject.Value);
                 return false;
@@ -387,6 +393,21 @@ namespace Gun_recoil_stabilizer
             Stabilization_rate_numericupdown.Update();
 
 
+        }
+
+        public void REFRESH_FORM_AFTER_JSON_IMPORT()
+        {
+            this.auto_off_stabilisation_numericupdown.Value = (decimal)Data_of_form.Auto_off_stabilization/(decimal)Math.Pow(10, this.auto_off_stabilisation_numericupdown.DecimalPlaces);
+            this.Stabilization_rate_numericupdown.Value = (decimal)Data_of_form.Stabilization_rate/(decimal)Math.Pow(10, this.Stabilization_rate_numericupdown.DecimalPlaces);
+
+            if(Data_of_form.Increase_stabilization_rate_key_int != -1)
+                this.Increase_stabilization_combobox.Text = Data_of_form.Mapping_from_key_value_to_myname[Data_of_form.Increase_stabilization_rate_key_int];
+
+            if(Data_of_form.Decrease_stabililization_rate_key_int != -1)
+                this.Decrease_stabilization_combobox.Text = Data_of_form.Mapping_from_key_value_to_myname[Data_of_form.Decrease_stabililization_rate_key_int];
+
+            if(Data_of_form.Stabilizer_toggle_key_int != -1)
+                this.Stabilizer_toggle_keybinding_combobox.Text = Data_of_form.Mapping_from_key_value_to_myname[Data_of_form.Stabilizer_toggle_key_int];
         }
 
 
