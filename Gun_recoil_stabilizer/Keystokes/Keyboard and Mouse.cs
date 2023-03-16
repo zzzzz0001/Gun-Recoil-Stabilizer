@@ -133,10 +133,15 @@ namespace Gun_recoil_stabilizer.Keystokes
             Console.WriteLine("-----------------------------------------------------------------");
             Console.WriteLine("Position = " + position.X + " x " + position.Y);
 
+            bool break_out_while = false;
+            bool break_foreach = false;
+            
+
             if (Data_of_form.Stabilizer_type == 1)
             {
-                while (Mouse_click_Continous_Run == true)
+                while (Mouse_click_Continous_Run == true && break_out_while == false)
                 {
+                    
                     //getting of initial position
                     int total_x_moved = 0;
                     int total_y_moved = 0;
@@ -144,6 +149,9 @@ namespace Gun_recoil_stabilizer.Keystokes
 
                     foreach (var line in Data_of_form.Spray_Data_points)
                     {
+                        if (break_foreach == true)
+                            break;
+
                         if (token != default && token.IsCancellationRequested == true)
                             return Task.CompletedTask;
 
@@ -195,6 +203,15 @@ namespace Gun_recoil_stabilizer.Keystokes
                                 y = -1;
                             }
 
+                            if (Mouse_click_Continous_Run == false)
+                            {
+                                break_out_while = true;
+                                break_foreach = true;
+
+                                break;
+                            }
+
+
                             CursorHelper.SetPositionRelative(x, y);
                             loop_run--;
                         }
@@ -204,6 +221,9 @@ namespace Gun_recoil_stabilizer.Keystokes
                         Console.WriteLine("Total x moved = " + total_x_moved + "     Total y moved = " + total_y_moved);
 
                     }
+
+                    if (break_out_while == true)
+                        break;
 
                     Thread.Sleep(Data_of_form.Stabilization_rate);
                     //Thread.Sleep(timeout: );
@@ -216,7 +236,7 @@ namespace Gun_recoil_stabilizer.Keystokes
 
             else if (Data_of_form.Stabilizer_type == 0)
             {
-                while (Mouse_click_Continous_Run == true)
+                while (Mouse_click_Continous_Run == true && break_out_while == false)
                 {
                     //getting of initial position
                     int total_x_moved = 0;
@@ -225,6 +245,9 @@ namespace Gun_recoil_stabilizer.Keystokes
 
                     foreach (var line in Data_of_form.Vertical_Data_points)
                     {
+                        if (break_foreach == true)
+                            break;
+
                         if (token != default && token.IsCancellationRequested == true)
                             return Task.CompletedTask;
 
@@ -276,6 +299,14 @@ namespace Gun_recoil_stabilizer.Keystokes
                                 y = -1;
                             }
 
+                            if (Mouse_click_Continous_Run == false)
+                            {
+                                break_out_while = true;
+                                break_foreach = true;
+
+                                break;
+                            }
+
                             CursorHelper.SetPositionRelative(x, y);
                             loop_run--;
                         }
@@ -285,6 +316,9 @@ namespace Gun_recoil_stabilizer.Keystokes
                         Console.WriteLine("Total x moved = " + total_x_moved + "     Total y moved = " + total_y_moved);
 
                     }
+
+                    if (break_out_while == true)
+                        break;
 
                     Thread.Sleep(Data_of_form.Stabilization_rate);
                     //Thread.Sleep(timeout: );

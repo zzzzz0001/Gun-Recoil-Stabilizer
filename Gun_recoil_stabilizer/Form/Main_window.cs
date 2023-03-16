@@ -411,12 +411,7 @@ namespace Gun_recoil_stabilizer
         }
 
 
-
-
-
-
         #endregion
 
-        
     }
 }

@@ -1,0 +1,13 @@
+{
+    "GameName": "Valorant",
+    "GunName": "Gun",
+    "Stabilizer_toggle_keybinding": "F2",
+    "Stabilization_increase_keybinding": "F3",
+    "Stabilization_decrease_keybinding": "F4",
+    "Stabilization_rate": 1,
+    "Auto_off_stabilization": 100,
+    "Spray_data_points":[
+        [0, 5]
+    ],
+    "Vertical_data_points":[0,5,10]
+}

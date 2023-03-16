@@ -1,0 +1,22 @@
+{
+    "GameName": "Tom Clancy's Ghost Recon Wildlands",
+    "GunName": "AUG A3",
+    "Extra Details": [
+        {"Scope":"PK-AS"},
+        {"Trigger":"Full-Auto/Semi"},
+        {"Magazine":"Standard (20)"},
+        {"Underbarrel":"Vertical Foregrip"},
+        {"Rail":"Rail Cover"},
+        {"Barrel":"Long Barrel"},
+        {"Muzzle":"Suppressor"}
+    ],
+    "Stabilizer_toggle_keybinding": "F2",
+    "Stabilization_increase_keybinding": "F3",
+    "Stabilization_decrease_keybinding": "F4",
+    "Stabilization_rate": 25,
+    "Auto_off_stabilization": 0,
+    "Spray_data_points":[
+        [0, 5]
+    ],
+    "Vertical_data_points":[5,6,5,6]
+}
