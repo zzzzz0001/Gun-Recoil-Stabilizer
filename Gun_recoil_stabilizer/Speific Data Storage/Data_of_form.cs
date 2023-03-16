@@ -38,15 +38,6 @@ namespace Gun_recoil_stabilizer.Speific_Data_Storage
             -1, -1, -1
         };
 
-        //public static Task Keyboard_extractor_task { get; set; } = null;
-
-        [Obsolete("This Method is Deprecated")]
-        public static void ADD(Tuple<int, int> input)
-        {
-            CSV_STORAGE.Add(input);
-            Dataset_chosen = true;
-        }
-
         public static string ADD(List<string> input)
         {
             Clear_uploaded_docs();
@@ -105,14 +96,6 @@ namespace Gun_recoil_stabilizer.Speific_Data_Storage
 
         public static void String_to_Keys_and_store(string Increase_stabilization_rate_key_ = null, string Decrease_stablilization_rate_key_ = null, string Stabilizer_toggle_key_ = null)
         {
-            //if not started, starting up the keyboard_extractor function
-            //if (Keyboard_extractor_task == null)
-            //    Keyboard_extractor_task = Task.Run(() => Keyboard_and_Mouse.Keyboard_Key_Extractor());   //this would run forever
-
-            //   Increase_stabilization_rate_key = Increase_stabilization_rate_key_;
-
-            //finding the byte value of it
-
             if (Increase_stabilization_rate_key_ != "" && Increase_stabilization_rate_key_ != null)
             {
                 Increase_stabilization_rate_key_int = Mapping_from_myname_to_key_valuye[Increase_stabilization_rate_key_];
@@ -275,7 +258,7 @@ namespace Gun_recoil_stabilizer.Speific_Data_Storage
 
             #region mouse_commands
 
-            { "Left Click", 1 },   //this one is important
+            { "Left Click", 1 },
             { "Right Click", 2 },
             { "Middle Click", 4 },
             { "Mouse Thumb 1", 5 },

@@ -24,11 +24,10 @@ namespace Gun_recoil_stabilizer.Keystokes
         public static bool Mouse_click_Continous_Run { get; set; }
 
         [DllImport("user32.dll")]
-        private static extern int GetAsyncKeyState(Int32 i);  //ref : https://hackmag.com/coding/diy-keylogger/
+        private static extern int GetAsyncKeyState(Int32 i);
 
         private static Task Mouse_extractor()
         {
-            #region track_keymap_we_applied_in_form_and_left_click_of_mouse
             bool pressed_set = false;
 
             while (Mouse_Key_Extractor_Continous_Run)
@@ -38,7 +37,6 @@ namespace Gun_recoil_stabilizer.Keystokes
                 {
                     if (pressed_set == false)  //key is going to be pressed
                     {
-                        //Console.WriteLine(((Keys)i).ToString() + " pressed. Key value = " + i);
                         pressed_set = true;
 
 
@@ -68,51 +66,6 @@ namespace Gun_recoil_stabilizer.Keystokes
                     }
                 }
             }
-            #endregion
-
-            #region to_view_what_is_being_clicked
-            //List<Keys> pressed_set = new List<Keys>();
-
-            //while (Continous_Run)
-            //{
-            //    //var sw = File.AppendText(@"C:\Users\Roshan\Desktop\from author\keylogger.txt");
-
-            //    Thread.Sleep(Data_of_form.Stabilization_rate);
-            //    //Console.Clear();
-
-            //    for (int i = 0; i <= 254; i++)
-            //    {
-
-            //        int state = GetAsyncKeyState(i);
-            //        if (state != 0)
-            //        {
-            //            if (pressed_set.Contains((Keys)i) == false)  //key is going to be pressed
-            //            {
-            //                Console.WriteLine(((Keys)i).ToString() + " pressed. Key value = " + i);
-            //                pressed_set.Add((Keys)i);
-            //                //sw.WriteLine(((Keys)i).ToString() + "    " + i);
-
-            //            }
-
-            //            else  //Key has been pressed already
-            //            {
-            //                //ignore mulitple of them
-            //            }
-            //        }
-            //        else  //not pressed
-            //        {
-            //            if (pressed_set.Contains((Keys)i) == true)
-            //            {
-            //                Console.WriteLine(((Keys)i).ToString() + " released. Key value = " + i);
-            //                pressed_set.Remove((Keys)i);
-            //            }
-            //        }
-            //    }
-
-            //    //sw.Close();
-
-            //}
-            #endregion
 
             return Task.CompletedTask;
         }
@@ -124,7 +77,7 @@ namespace Gun_recoil_stabilizer.Keystokes
             while (true)
             {
                 var hotkey = Data_of_form.Keys_inc_dec_tog_int.ToList(); //has to do ToList() as we dont need copy by reference as it could break the foreach loop if the variable change while its running
-                foreach (var i in hotkey)  //no need to run through everything
+                foreach (var i in hotkey)
                 {
                     if (i == -1)
                         continue;
@@ -134,7 +87,6 @@ namespace Gun_recoil_stabilizer.Keystokes
                     {
                         if (pressed_set.Contains((Keys)i) == false)  //key is going to be pressed
                         {
-                            //Console.WriteLine(((Keys)i).ToString() + " pressed. Key value = " + i);
                             pressed_set.Add((Keys)i);
 
                             if (i == Data_of_form.Stabilizer_toggle_key_int)
@@ -218,32 +170,6 @@ namespace Gun_recoil_stabilizer.Keystokes
                         default:
                             break;
                     }
-                    
-
-                    
-
-                    //var newX = position.X + xDelta;
-                    //var newY = position.Y + yDelta;
-                    //foreach (var screen in Screen.AllScreens)
-                    //{
-                    //    // is this the screen the cursor is on
-                    //    var bounds = screen.Bounds;
-                    //    if (position.X >= bounds.X && position.X <= (bounds.X + bounds.Width))
-                    //    {
-                    //        // this is our screen check if the delta will put us out
-                    //        if (newX < bounds.X || newX > bounds.Right)
-                    //        {
-                    //            xDelta = -xDelta;
-                    //        }
-                    //        if (newY < bounds.Y || newY > bounds.Bottom)
-                    //        {
-                    //            yDelta = -yDelta;
-                    //        }
-
-                    //        // we don't need to scan through the rest
-                    //        break;
-                    //    }
-                    //}
 
                     #region anti_anti_cheat_movement_mouse
                     int loop_run = 0;
@@ -294,21 +220,10 @@ namespace Gun_recoil_stabilizer.Keystokes
 
                 Thread.Sleep(Data_of_form.Stabilization_rate);
 
-                //CursorHelper.SetPositionAbsolute(position);
-
                 position = CursorHelper.GetCurrentPosition();
                 Console.WriteLine("Position = " + position.X + " x " + position.Y);
 
             }
-
-            //while (true)
-            //{
-            //    Thread.Sleep(150);
-            //    Console.Clear();
-            //    var position = CursorHelper.GetCurrentPosition();
-            //    Console.WriteLine("X = " + position.X + "      Y = " + position.Y);
-            //}
-
 
             return Task.CompletedTask;
         }
@@ -325,7 +240,7 @@ namespace Gun_recoil_stabilizer.Keystokes
         /// <param name="Decrease_stablilization_rate_key"></param>
         /// <param name="Stabilizer_toggle_key"></param>
         /// <returns></returns>
-        public static Task START() //, string Increase_stabilization_rate_key, string Decrease_stablilization_rate_key, string Stabilizer_toggle_key
+        public static Task START()
         {
             Mouse_Key_Extractor_Continous_Run = true;
 
@@ -342,8 +257,6 @@ namespace Gun_recoil_stabilizer.Keystokes
             Data_of_form.formcontrol.Invoke(Data_of_form.formcontrol.Stop_delegate);
 
             return Task.CompletedTask;
-
-            //also make sure the colour and text changes back as it could be triggered from the toggle key
         }
 
         public static Task START_from_button_action_delegate()
