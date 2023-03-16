@@ -224,11 +224,6 @@ namespace Gun_recoil_stabilizer
                 
         }
 
-        private void Precise_point_checkBox_CheckedChanged(object sender, EventArgs e)
-        {
-            Data_of_form.Precise_point_check_box = Precise_point_checkBox.Checked;
-        }
-
         #endregion
 
         #region my_functions
